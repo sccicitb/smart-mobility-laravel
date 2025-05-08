@@ -9,7 +9,7 @@ services:
     networks:
       - smartx-mobility
     ports:
-      - "8070:80"
+      - "8078:80"
 
 networks:
   smartx-mobility:
