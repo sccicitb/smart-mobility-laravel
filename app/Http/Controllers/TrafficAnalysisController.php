@@ -98,4 +98,109 @@ class TrafficAnalysisController extends Controller
         return response()->json($data);
     }
 
+    public function evaluation()
+    {
+        $rawData = DB::select("
+            SELECT
+                CASE
+                    WHEN HOUR(CONVERT_TZ(waktu, '+00:00', '+07:00')) BETWEEN 7 AND 8 THEN 'Morning (07.00–08.00)'
+                    WHEN HOUR(CONVERT_TZ(waktu, '+00:00', '+07:00')) BETWEEN 12 AND 13 THEN 'Day (12.00–13.00)'
+                    WHEN HOUR(CONVERT_TZ(waktu, '+00:00', '+07:00')) BETWEEN 16 AND 17 THEN 'Evening (16.45–17.45)'
+                    ELSE NULL
+                END AS time_slot,
+                dari_arah AS arm,
+                SUM(BS + TS + TB + BB + GANDENG + KTB) AS stopped_vehicles
+            FROM arus
+            WHERE waktu >= CURDATE() - INTERVAL 1 DAY
+            AND HOUR(CONVERT_TZ(waktu, '+00:00', '+07:00')) IN (7, 8, 12, 13, 16, 17)
+            GROUP BY time_slot, arm
+            HAVING time_slot IS NOT NULL
+        ");
+
+        $capacity = 750;
+        $results = [];
+
+        foreach ($rawData as $row) {
+            $saturation = $row->stopped_vehicles / $capacity;
+            $queueLength = $row->stopped_vehicles * 0.1;
+            $delay = round($row->stopped_vehicles * 0.005, 2); // 5 detik total per kendaraan
+
+            $los = match (true) {
+                $saturation < 0.1 => 'A',
+                $saturation < 0.2 => 'B',
+                $saturation < 0.3 => 'C',
+                $saturation < 0.4 => 'D',
+                $saturation < 0.5 => 'E',
+                default => 'F',
+            };
+
+            $results[] = [
+                'Time' => $row->time_slot,
+                'Arm' => ucfirst($row->arm),
+                'Saturation Degree' => round($saturation, 3),
+                'Queue Length (m)' => round($queueLength),
+                'Stopped Vehicles (vehicle/hour)' => $row->stopped_vehicles,
+                'Delay (s/vehicle)' => $delay,
+                'LoS' => $los
+            ];
+        }
+
+        return response()->json($results);
+    }
+
+    public function summary()
+    {
+        // 1. PEAK TRAFFIC TIME
+        $peak = DB::table('arus')
+            ->selectRaw("HOUR(CONVERT_TZ(waktu, '+00:00', '+07:00')) AS hour_slot")
+            ->selectRaw("SUM(SM + MP + AUP + TR + BS + TS + TB + BB + GANDENG + KTB) AS total_vehicles")
+            ->where('waktu', '>=', now()->subDay())
+            ->groupBy('hour_slot')
+            ->orderByDesc('total_vehicles')
+            ->limit(1)
+            ->first();
+
+        if ($peak) {
+            $startHour = str_pad($peak->hour_slot, 2, '0', STR_PAD_LEFT) . ':00';
+            $endHour = str_pad($peak->hour_slot + 1, 2, '0', STR_PAD_LEFT) . ':00';
+            $peakTrafficTime = $startHour ." - ". $endHour;
+
+            $queued = DB::table('arus')
+                ->whereBetween(DB::raw("HOUR(CONVERT_TZ(waktu, '+00:00', '+07:00'))"), [$peak->hour_slot, $peak->hour_slot])
+                ->where('waktu', '>=', now()->subDay())
+                ->selectRaw("SUM(BS + TS + TB + BB + GANDENG + KTB) AS queued")
+                ->value('queued');
+        } else {
+            $peakTrafficTime = "N/A";
+            $queued = 0;
+        }
+
+
+        // 2. CO POLLUTION
+        $co = DB::table('arus')
+            ->where('waktu', '>=', now()->subDay())
+            ->selectRaw("ROUND(SUM(SM + MP + AUP + TR + BS + TS + TB + BB + GANDENG + KTB) * 0.02) AS co")
+            ->value('co');
+
+        // 3. LOST ESTIMATION
+        $loss = DB::table('arus')
+            ->where('waktu', '>=', now()->subDay())
+            ->selectRaw("SUM(BS + TS + TB + BB + GANDENG + KTB) * 250 AS loss")
+            ->value('loss');
+
+        // 4. VEHICLES QUEUED pada jam puncak
+        $queued = DB::table('arus')
+            ->whereBetween(DB::raw("HOUR(CONVERT_TZ(waktu, '+00:00', '+07:00'))"), [$peak->hour_slot, $peak->hour_slot])
+            ->where('waktu', '>=', now()->subDay())
+            ->selectRaw("SUM(BS + TS + TB + BB + GANDENG + KTB) AS queued")
+            ->value('queued');
+
+        return response()->json([
+            "Peak Traffic Time" => $peakTrafficTime,
+            "CO Pollution" => "{$co} µg/m³",
+            "Lost Estimation" => "Rp" . number_format($loss, 0, ',', '.'),
+            "Vehicles Queued" => (int) $queued
+        ]);
+    }
+
 }

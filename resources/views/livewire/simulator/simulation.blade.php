@@ -433,33 +433,6 @@
                     </div>
                 </div>
                 @endforeach
-            
-                <div class="row text-center">
-                    <div class="col-md-3">
-                        <div class="card p-3 text-white" style="background: linear-gradient(#CC0001, #BA0001, #CC0001)">
-                            <h5>Peak Traffic Time</h5>
-                            <p><strong>12.00 - 13.00</strong></p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card p-3 text-white" style="background: linear-gradient(#CC0001, #BA0001, #CC0001)">
-                            <h5>CO Pollution</h5>
-                            <p><strong>30 µg/m³</strong></p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card p-3 text-white" style="background: linear-gradient(#CC0001, #BA0001, #CC0001)">
-                            <h5>Lost Estimation</h5>
-                            <p><strong>$100</strong></p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card p-3 text-white" style="background: linear-gradient(#CC0001, #BA0001, #CC0001)">
-                            <h5>Vehicles Queued</h5>
-                            <p><strong>49</strong></p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div> --}}
         <div class="tab-pane fade" id="pills-ulala" role="tabpanel" aria-labelledby="pills-ulala-tab">
@@ -899,93 +872,70 @@
         
         // Fungsi untuk menghasilkan data evaluasi secara dinamis
         function generateEvaluationData() {
-            // Definisikan time slots
-            const timeSlots = [
-                { label: "Morning (07.00-08.00)", arms: ["North", "East", "South", "West"] },
-                { label: "Day (12.00-13.00)", arms: ["North", "East", "South", "West"] },
-                { label: "Evening (16.45-17.45)", arms: ["North", "East", "South", "West"] }
-            ];
-            
-            const evaluationContent = document.getElementById("evaluation-content");
-            evaluationContent.innerHTML = "";
-            
-            // Untuk setiap time slot, buat card dengan tabel data
-            timeSlots.forEach(slot => {
-                // Buat array untuk menyimpan data tiap arm
-                let slotData = [];
-                slot.arms.forEach(arm => {
-                    slotData.push({
-                        arm: arm,
-                        saturation: randomFloat(0.01, 0.25, 3),
-                        queue_length: randomInt(10, 100),
-                        stopped_vehicles: randomInt(200, 1000),
-                        delay: randomFloat(1, 5, 2),
-                        los: randomLoS()
+            fetch("/api/traffic-analysis/evaluation")
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById("evaluation-content");
+                const summary = document.getElementById("evaluation-summary");
+                container.innerHTML = "";
+
+                const timeSlots = ["Morning (07.00–08.00)", "Day (12.00–13.00)", "Evening (16.45–17.45)"];
+
+                timeSlots.forEach(slot => {
+                    const slotData = data.filter(d => d.Time === slot);
+
+                    let card = `<div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4>${slot}</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Arm</th>
+                                        <th>Saturation Degree</th>
+                                        <th>Queue Length (m)</th>
+                                        <th>Stopped Vehicles (vehicle/hour)</th>
+                                        <th>Delay (s/vehicle)</th>
+                                        <th>LoS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
+                    slotData.forEach(d => {
+                        card += `<tr>
+                            <td>${d.Arm}</td>
+                            <td>${d["Saturation Degree"]}</td>
+                            <td>${d["Queue Length (m)"]}</td>
+                            <td>${d["Stopped Vehicles (vehicle/hour)"]}</td>
+                            <td>${d["Delay (s/vehicle)"]}</td>
+                            <td>${d.LoS}</td>
+                        </tr>`;
                     });
+
+                    card += `</tbody></table></div></div>`;
+                    container.innerHTML += card;
                 });
-                
-                // Cari nilai saturation maksimum pada slot ini
-                let maxSaturation = Math.max(...slotData.map(data => data.saturation));
-                
-                // Buat card container
-                let card = document.createElement("div");
-                card.className = "card mb-4";
-                
-                let cardHeader = document.createElement("div");
-                cardHeader.className = "card-header bg-primary text-white";
-                let headerH4 = document.createElement("h4");
-                headerH4.textContent = slot.label;
-                cardHeader.appendChild(headerH4);
-                card.appendChild(cardHeader);
-                
-                let cardBody = document.createElement("div");
-                cardBody.className = "card-body";
-                
-                // Buat tabel evaluasi
-                let table = document.createElement("table");
-                table.className = "table table-bordered table-striped";
-                let thead = document.createElement("thead");
-                thead.className = "table-dark";
-                thead.innerHTML = `
-                    <tr>
-                        <th>Arm</th>
-                        <th>Saturation Degree</th>
-                        <th>Queue Length (m)</th>
-                        <th>Stopped Vehicles (vehicle/hours)</th>
-                        <th>Delay (s/vehicle)</th>
-                        <th>LoS</th>
-                    </tr>
-                `;
-                table.appendChild(thead);
-                
-                let tbody = document.createElement("tbody");
-                slotData.forEach(data => {
-                    let tr = document.createElement("tr");
-                    // Jika nilai saturation sama dengan nilai maksimum, tambahkan class highlight (misal: background kuning)
-                    if(data.saturation === maxSaturation) {
-                        tr.classList.add("highlight");
-                    }
-                    tr.innerHTML = `
-                        <td>${data.arm}</td>
-                        <td>${data.saturation}</td>
-                        <td>${data.queue_length}</td>
-                        <td>${data.stopped_vehicles}</td>
-                        <td>${data.delay}</td>
-                        <td>${data.los}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-                table.appendChild(tbody);
-                cardBody.appendChild(table);
-                card.appendChild(cardBody);
-                evaluationContent.appendChild(card);
+
+                summary.style.display = "block"; // show summary cards
+            })
+            .catch(err => {
+                console.error("Failed to load evaluation data:", err);
             });
-            
-            // Randomisasi summary cards
-            document.getElementById("peak-traffic-time").textContent = "12.00 - 13.00";
-            document.getElementById("co-pollution").textContent = randomInt(10, 50) + " µg/m³";
-            document.getElementById("lost-estimation").textContent = "$" + randomInt(50, 200);
-            document.getElementById("vehicles-queued").textContent = randomInt(20, 100);
+
+
+            fetch("/api/traffic-analysis/summary")
+            .then(res => res.json())
+            .then(summary => {
+                document.getElementById("peak-traffic-time").textContent = summary["Peak Traffic Time"];
+                document.getElementById("co-pollution").textContent = summary["CO Pollution"];
+                document.getElementById("lost-estimation").textContent = summary["Lost Estimation"];
+                document.getElementById("vehicles-queued").textContent = summary["Vehicles Queued"];
+            })
+            .catch(err => {
+                console.error("Failed to load summary:", err);
+            });
+
         }
         
         // Fungsi untuk mengatur loading screen dan memuat data evaluasi setelah 45 detik
@@ -1009,6 +959,56 @@
                 evaluationSummary.style.display = "block";
             }, 45000);
         }
+
+        // function loadEvaluationData() {
+        //     fetch("/api/traffic-analysis/evaluation")
+        //         .then(res => res.json())
+        //         .then(data => {
+        //             const container = document.getElementById("evaluation-content");
+        //             const summary = document.getElementById("evaluation-summary");
+        //             container.innerHTML = "";
+
+        //             const timeSlots = ["Morning (07.00–08.00)", "Day (12.00–13.00)", "Evening (16.45–17.45)"];
+        //             timeSlots.forEach(slot => {
+        //                 const slotData = data.filter(d => d.Time === slot);
+
+        //                 let card = `<div class="card mb-4">
+        //                     <div class="card-header bg-primary text-white">
+        //                         <h4>${slot}</h4>
+        //                     </div>
+        //                     <div class="card-body">
+        //                         <table class="table table-bordered table-striped">
+        //                             <thead class="table-dark">
+        //                                 <tr>
+        //                                     <th>Arm</th>
+        //                                     <th>Saturation Degree</th>
+        //                                     <th>Queue Length (m)</th>
+        //                                     <th>Stopped Vehicles (vehicle/hour)</th>
+        //                                     <th>Delay (s/vehicle)</th>
+        //                                     <th>LoS</th>
+        //                                 </tr>
+        //                             </thead>
+        //                             <tbody>`;
+
+        //                 slotData.forEach(d => {
+        //                     card += `<tr>
+        //                         <td>${d.Arm}</td>
+        //                         <td>${d["Saturation Degree"]}</td>
+        //                         <td>${d["Queue Length (m)"]}</td>
+        //                         <td>${d["Stopped Vehicles (vehicle/hour)"]}</td>
+        //                         <td>${d["Delay (s/vehicle)"]}</td>
+        //                         <td>${d.LoS}</td>
+        //                     </tr>`;
+        //                 });
+
+        //                 card += `</tbody></table></div></div>`;
+        //                 container.innerHTML += card;
+        //             });
+
+        //             summary.style.display = "block"; // show summary cards
+        //         });
+        // }
+
         
         // Panggil fungsi untuk memulai loading data evaluasi di page 4
         loadEvaluationData();
