@@ -704,7 +704,7 @@
         
         // Fungsi untuk menghasilkan data analisis secara dinamis dan mengisi tabel sekaligus menyimpan data saturation
         function generateAnalysisData() {
-            fetch("/api/traffic-analysis/intersection")
+            fetch("/api/traffic-analysis/intersection" + "/" + localStorage.getItem("cycle_time") + "/" + localStorage.getItem("green") + "/" + localStorage.getItem("total_arms"))
                 .then(res => res.json())
                 .then(rawData => {
                     const tbody = document.getElementById("analysis-table-body");

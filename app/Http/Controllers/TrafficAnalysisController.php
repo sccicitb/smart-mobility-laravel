@@ -47,17 +47,17 @@ class TrafficAnalysisController extends Controller
         return response()->json($results);
     }
 
-    public function intersection()
+    public function intersection($cycleTime = 0, $greenTime = 0, $capacity = 0)
     {
         $results = DB::select("
         SELECT
             waktu_puncak,
             dari_arah AS arm,
             SUM(kendaraan) AS `Saturation (vehicle/hour)`,
-            ROUND(SUM(kendaraan) / 6000, 3) AS `Flow Ratio`, -- contoh pembagi kapasitas
-            120 AS `Cycle time(s)`, -- fixed example
-            25 AS `Green Time(s)`,  -- fixed example
-            750 AS `Capacity (vehicle/hour)` -- fixed example
+            ROUND(SUM(kendaraan) / ?, 3) AS `Flow Ratio`, -- contoh pembagi kapasitas
+            ? AS `Cycle time(s)`, -- fixed example
+            ? AS `Green Time(s)`,  -- fixed example
+            ? AS `Capacity (vehicle/hour)` -- fixed example
         FROM (
             SELECT
             CASE
@@ -79,7 +79,12 @@ class TrafficAnalysisController extends Controller
         GROUP BY waktu_puncak, dari_arah
         ORDER BY waktu_puncak, dari_arah;
       
-        ");
+        ", [
+            $capacity,  // untuk Flow Ratio
+            $cycleTime, // Cycle time
+            $greenTime, // Green time
+            $capacity   // Capacity
+        ]);    
 
         return response()->json($results);
     }
