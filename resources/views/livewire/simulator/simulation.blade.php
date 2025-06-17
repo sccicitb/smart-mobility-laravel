@@ -17,34 +17,6 @@
 
     <div class="tab-content mt-3" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-data-source" role="tabpanel" aria-labelledby="pills-data-source-tab">
-            {{-- <div id="sub-page-1-1" class="sub-page">
-                <!-- <h6>Select Data Source</h6> -->
-                <div class="d-flex justify-content-left mt-3">
-                    <button class="btn custom-btn me-3">
-                        <i class="bi bi-plus-lg"></i> Data Dummy
-                    </button>
-                    <button class="btn custom-btn">
-                        <i class="bi bi-plus-lg"></i> Data Real
-                    </button>
-                </div>
-            </div> --}}
-            {{-- <div id="sub-page-1-1" class="sub-page">
-                <!-- <h6>Select Data Source</h6> -->
-                <div class="d-flex justify-content-left mt-3">
-                    <!-- <button class="btn custom-btn me-3" id="btn-dummy-data">
-                        <i class="bi bi-plus-lg"></i> Data Dummy
-                    </button>
-                    <button class="btn custom-btn" id="btn-real-data">
-                        <i class="bi bi-plus-lg"></i> Data Real
-                    </button> -->
-                </div>
-                <!-- Bagian pilihan tanggal untuk Data Dummy -->
-                <div id="dummy-data-date-selection" style="display: none; margin-top: 15px;">
-                    <label for="dummy-date">Select Date:</label>
-                    <input type="date" id="dummy-date" class="form-control" value="2024-02-13">
-                    <button id="btn-load-top5" class="btn btn-primary">Load Top 5 Data</button>
-                </div>
-            </div> --}}
             <div id="sub-page-1-1" class="sub-page">
                 <!-- <h6>Select Data Source</h6> -->
                 <div class="d-flex justify-content-left mt-3">
@@ -58,9 +30,9 @@
                 <!-- Bagian pilihan tanggal untuk Data Dummy -->
                 <div id="dummy-data-date-selection" style="display: none; margin-top: 15px;">
                     <label for="dummy-date">Select Date:</label>
-                    <input type="date" id="dummy-date" class="form-control" value="2024-02-13">
+                    <input type="date" id="dummy-date" class="form-control" value="2025-05-13">
                     <br>
-                    <button id="btn-load-top5" class="btn btn-primary">Load Top 5 Data</button>
+                    <button id="btn-load-top5" class="btn btn-primary">Load Head Data</button>
                 </div>
                 <div class="table-responsive mt-3" id="top5-table-wrapper" style="display: none;">
                     <table class="table table-bordered">
@@ -85,54 +57,6 @@
                 </div>
 
             </div>
-            {{-- <div id="sub-page-1-2" class="sub-page" style="display: none;">
-                <h6> Design intersection conditions to accommodate dynamic input traffic flows </h6>
-                <div class="simulator-box shadow-lg">
-                    <div class="row">
-                        <!-- City Demographics Section -->
-                        <div class="col-md-6">
-                            <h4><strong>a. City Demographics</strong></h4>
-                            <p>Demographics such as population size influence evaluation assessment standards.</p>
-                            {{-- <button class="btn choose-city-btn">Choose City</button>
-                            <div class="dropdown">
-                                <button class="btn choose-city-btn dropdown-toggle" type="button" id="chooseCityDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Choose Your City
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="chooseCityDropdown">
-                                    <li><a class="dropdown-item" href="#" data-city="Jakarta">Jakarta</a></li>
-                                    <li><a class="dropdown-item" href="#" data-city="Bandung">Bandung</a></li>
-                                    <li><a class="dropdown-item" href="#" data-city="Surabaya">Surabaya</a></li>
-                                    <li><a class="dropdown-item" href="#" data-city="Jogja">Jogja</a></li>
-                                </ul>
-                            </div>
-                        </div>
-            
-                        <!-- Intersection Condition Section -->
-                        <div class="col-md-6">
-                            <h4><strong>b. Intersection Condition</strong></h4>
-                            <p>Generally, the width of the intersection arm ranges from 4-5 m</p>
-            
-                            <div class="d-flex justify-content-center">
-                                <img src="{{ asset('images/simulator-page-1-2.png') }}" alt="Intersection Diagram" class="intersection-img">
-                            </div>
-            
-                            <div class="input-group-box mt-3">
-                                <label for="north-arm">North Arm Road Width</label>
-                                <input type="text" class="form-control" id="north-arm" placeholder="Input">
-            
-                                <label for="west-arm">West Arm Road Width</label>
-                                <input type="text" class="form-control" id="west-arm" placeholder="Input">
-            
-                                <label for="south-arm">South Arm Road Width</label>
-                                <input type="text" class="form-control" id="south-arm" placeholder="Input">
-            
-                                <label for="east-arm">East Arm Road Width</label>
-                                <input type="text" class="form-control" id="east-arm" placeholder="Input">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
             <div id="sub-page-1-2" class="sub-page" style="display: none;">
                 <h6>Design intersection conditions to accommodate dynamic input traffic flows</h6>
                 <div class="simulator-box shadow-lg">
@@ -147,15 +71,15 @@
                                     Choose Your City
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="chooseCityDropdown">
-                                    <li><a class="dropdown-item" href="#" data-city="Jakarta">Jakarta</a></li>
+                                    <!-- <li><a class="dropdown-item" href="#" data-city="Jakarta">Jakarta</a></li>
                                     <li><a class="dropdown-item" href="#" data-city="Bandung">Bandung</a></li>
-                                    <li><a class="dropdown-item" href="#" data-city="Surabaya">Surabaya</a></li>
+                                    <li><a class="dropdown-item" href="#" data-city="Surabaya">Surabaya</a></li> -->
                                     <li><a class="dropdown-item" href="#" data-city="Jogja">Jogja</a></li>
                                 </ul>
                             </div>
                         </div>
                 
-                        <!-- Intersection Condition Section -->
+                        <!-- Intersection Condition Section USE THIS SECTION-->
                         <div class="col-md-6">
                             <h4><strong>b. Intersection Condition</strong></h4>
                             <p>Generally, the width of the intersection arm ranges from 4-5 m</p>
@@ -487,6 +411,8 @@
 </div>
 
 <script>
+    var selected_date = new Date('2022-01-01');
+
     function loadTop5Data(selectedDate) {
         const wrapper = document.getElementById("top5-table-wrapper");
         const tbody = document.getElementById("top5-table-body");
@@ -553,6 +479,7 @@
         if (btnLoadTop5) { // <-- CEK ADA atau tidak
             btnLoadTop5.addEventListener("click", function () {
                 const selectedDate = dummyDateInput.value;
+                localStorage.setItem("selectedDate", selectedDate);
                 if (selectedDate) {
                     loadTop5Data(selectedDate);
                 } else {
@@ -587,7 +514,7 @@
                     chart: { type: 'line' },
                     title: { text: '' },
                     xAxis: { categories: ['Morning (07.00–08.00)', 'Day (12.00–13.00)', 'Evening (16.45–17.45)'] },
-                    yAxis: { title: { text: 'Saturation (vehicle/hour)' }, min: 0 },
+                    yAxis: { title: { text: 'q (traffic flow per hour)' }, min: 0 },
                     series: seriesData
                 });
             });
@@ -654,18 +581,16 @@
                     //     return false;
                     // }
                     // Jika Data Dummy, pastikan tanggal tidak kosong
-                    if (selectedDataSource === "dummy") {
-                        let dummyDate = document.getElementById("dummy-date").value;
-                        if (!dummyDate) {
-                            alert("Silakan pilih tanggal untuk Data Dummy.");
-                            return false;
-                        }
+                    let dummyDate = document.getElementById("dummy-date").value;
+                    if (!dummyDate) {
+                        alert("Please select a date to retrieve the data.");
+                        return false;
                     }
                 } else if (currentSubPage === 2) {
                     // Validasi pada sub-page 1.2
                     // Pastikan kota telah dipilih
                     if (chooseCityBtn.textContent.trim() === "Choose Your City") {
-                        alert("Silakan pilih kota terlebih dahulu.");
+                        alert("Please select a city first.");
                         return false;
                     }
                     // Validasi input lebar jalan
@@ -674,9 +599,20 @@
                     let south = document.getElementById("south-arm").value;
                     let east = document.getElementById("east-arm").value;
                     if (!north || !west || !south || !east) {
-                        alert("Silakan isi semua input untuk lebar jalan pada persimpangan.");
+                        alert("Please complete all input fields for intersection arm widths.");
                         return false;
                     }
+
+                    // simpan semua nilai ke localstorage
+                    localStorage.setItem("north", north);
+                    localStorage.setItem("west", west);
+                    localStorage.setItem("south", south);
+                    localStorage.setItem("east", east);
+
+                    // simpan sum dari semua arah
+                    let total_arms = parseInt(north) + parseInt(west) + parseInt(south) + parseInt(east);
+                    localStorage.setItem("total_arms", total_arms);
+
                 }
             }
             // Validasi untuk Tab 2 (Paramater Setting)
@@ -687,9 +623,19 @@
                 let green = document.getElementById("red-light-2").value;
                 let allRed = document.getElementById("all-red-light").value;
                 if (!red || !yellow || !green || !allRed) {
-                    alert("Silakan isi semua input waktu lampu lalu lintas.");
+                    alert("Please complete all input fields for traffic light timing.");
                     return false;
                 }
+
+                // simpan semua nilai ke localstorage
+                localStorage.setItem("red", red);
+                localStorage.setItem("yellow", yellow);
+                localStorage.setItem("green", green);
+                localStorage.setItem("allRed", allRed);
+
+                // sum semua
+                let cycle_time = parseInt(red) + parseInt(yellow) + parseInt(green) + parseInt(allRed);
+                localStorage.setItem("cycle_time", cycle_time);
             }
             return true;
         }
