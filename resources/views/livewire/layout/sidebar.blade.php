@@ -13,8 +13,13 @@
         </button>
 
         <!-- Navigation Items -->
-        <div class="nav flex-column">
-            
+        <div class="nav flex-column">    
+            <a href="http://63.250.52.19:9091/dashboard/mobility" class="nav-link d-flex align-items-center">
+                <div wire:ignore>
+                    <i data-lucide="layout-dashboard" class="text-white"></i>
+                </div>
+                <span class="text-white ms-3" style="display: {{ $collapsed ? 'none' : 'inline' }}">Dashboard</span>
+            </a>
             <a href="{{ route('simulations') }}"
                 class="nav-link d-flex align-items-center {{ request()->routeIs('simulations') ? 'active' : '' }}">
                 <div wire:ignore>
@@ -95,3 +100,4 @@
         </div>
     </div>
 </div>
+
