@@ -17,7 +17,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <!-- Custom CSS -->
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+    {{--
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" />
@@ -25,38 +26,63 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <style>
         body {
-            background: #f5f5f5;
+            background: #16598b;
+            /* background: #fff; */
+            overflow-x: hidden;
+        }
+
+        .sidebar-side {
+            height: 100vh;
+            overflow: hidden;
+            /* penting agar tidak bisa scroll */
+            flex-shrink: 0;
+            /* agar tidak mengecil saat wrapper menyusut */
         }
 
         .wrapper {
-            min-height: 100vh;
-            width: 100%;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .content-wrapper {
-            flex: 1;
+            min-height: 100vh;
+            height: 100%;
             width: 100%;
-            /* margin-left: 250px;
-            transition: all 0.3s ease; */
+            /* flex: 1; */
+            overflow-x: auto;
         }
 
         .content-wrapper.collapsed {
             /* margin-left: 70px; */
         }
 
-        .main-content {
+        /* .main-content {
+            overflow-x: auto;
+            min-width: 100%;
+            flex: 1;
             min-height: calc(100vh - 80px);
-            /* background: #002F34; */
-            padding: 1.5rem;
+            padding: 1rem 2.5rem;
             border-radius: 16px;
-            margin: 1rem;
+            white-space: nowrap;
+        } */
+
+        .main-content {
+            min-width: max-content;
+            /* ini bikin kontennya lebar jika butuh */
+            flex: 1;
+            padding: 1rem 2.5rem;
+            border-radius: 16px;
+            /* hapus white-space: nowrap; */
+            /* hapus overflow-x: auto; karena sudah di content-wrapper */
         }
+
 
         /* Navbar styles */
         .navbar {
-            background: #7585C2;
-            padding: 0.75rem 1.5rem;
+            padding: 0.50rem 1rem;
             width: 100%;
+            position: sticky;
+            flex: 1;
         }
 
         .navbar .breadcrumb-item+.breadcrumb-item::before {
@@ -69,6 +95,18 @@
             border-radius: 50%;
         }
 
+        .maps-content {
+            width: 100%;
+            display: flex;
+            background-color: #fff;
+        }
+
+        .sub-maps {
+            min-height: 90%;
+            padding: 10px;
+            margin: 20px;
+        }
+
         /* Card styles */
         .card {
             border: none;
@@ -77,11 +115,41 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
+        .navigasi {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            place-items: center;
+            justify-content: space-between;
+        }
+
+        .autoBread {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .bread {
+            display: flex;
+            flex-direction: row;
+        }
+
         .content-card {
             background: #ffffff;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
+            padding: 1.2rem;
+            height: fit-content;
+            min-width: fit-content;
+            width: 100%;
+            place-items: center;
+            border-radius: 12px;
+            /* width: fit-content; */
+            /* margin-bottom: 1rem; */
+        }
+
+        table {
+            min-width: max-content;
+            /* supaya tidak dipaksa ngepas viewport */
         }
 
         /* Table styles */
@@ -136,6 +204,7 @@
 
 <body>
     @livewireScripts
+
     @if (Auth::check() && !request()->is('login'))
         <div class="wrapper d-flex">
             <livewire:layout.sidebar />
@@ -192,7 +261,8 @@
             });
         });
     </script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
+    {{--
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

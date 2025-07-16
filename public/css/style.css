@@ -6,7 +6,7 @@
     width: 250px;
     z-index: 100;
     transition: all 0.3s ease;
-    background: #DFE3F1;
+    background: #dfe3f1;
 }
 
 .sidebar.collapsed {
@@ -425,7 +425,7 @@
 /* Card Styling */
 .card {
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -538,6 +538,7 @@
 .main-content {
     min-height: calc(100vh - 80px);
     background: #f5f5f5;
+    overflow-x: auto;
 }
 
 /* Navbar Components */
@@ -571,7 +572,6 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
-
 /* .tutorial-bg-container {
     background: url('../images/bg.png') no-repeat center center fixed;
     background-size: cover;
@@ -580,3 +580,4 @@
     justify-content: center;
     align-items: center;
 } */
+
