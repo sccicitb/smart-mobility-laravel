@@ -32,6 +32,7 @@ Route::get('/auth/callback', [Login::class, 'handleSSOCallbackKeycloak'])->name(
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [Login::class, 'destroy'])->name('logout');
     Route::get('/maps', Maps::class)->name('maps');
+    Route::get('/simulations', Simulations::class)->name('simulations');
 });
 // Route::get('/dashboard', Dashboard::class)->name('dashboard-legacy');
 Route::get('/intersections', Intersections::class)->name('intersections');
@@ -40,7 +41,6 @@ Route::get('/traffic-flow', Trafics::class)->name('traffic-flow');
 Route::get('/congestions', Congestions::class)->name('congestions');
 Route::get('/travel-times', Traveltimes::class)->name('travel-times');
 Route::get('/settings', Settings::class)->name('settings');
-Route::get('/simulations', Simulations::class)->name('simulations');
 
 
 Route::get('/tutorial/intersections', [IntersectionController::class, 'tutorial'])->name('tutorial');
