@@ -1,0 +1,113 @@
+[
+    {
+      "waktu_puncak": "Morning (07.00-08.00)",
+      "arm": "North",
+      "Saturation (vehicle/hour)": 2156,
+      "Flow Ratio": 0.017,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 449
+    },
+    {
+      "waktu_puncak": "Morning (07.00-08.00)",
+      "arm": "East",
+      "Saturation (vehicle/hour)": 3590,
+      "Flow Ratio": 0.122,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 748
+    },
+    {
+      "waktu_puncak": "Morning (07.00-08.00)",
+      "arm": "South",
+      "Saturation (vehicle/hour)": 3072,
+      "Flow Ratio": 0.040,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 640
+    },
+    {
+      "waktu_puncak": "Morning (07.00-08.00)",
+      "arm": "West",
+      "Saturation (vehicle/hour)": 3612,
+      "Flow Ratio": 0.110,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 753
+    },
+  
+    {
+      "waktu_puncak": "Day (12.00-13.00)",
+      "arm": "North",
+      "Saturation (vehicle/hour)": 2238,
+      "Flow Ratio": 0.034,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 466
+    },
+    {
+      "waktu_puncak": "Day (12.00-13.00)",
+      "arm": "East",
+      "Saturation (vehicle/hour)": 3558,
+      "Flow Ratio": 0.194,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 741
+    },
+    {
+      "waktu_puncak": "Day (12.00-13.00)",
+      "arm": "South",
+      "Saturation (vehicle/hour)": 3058,
+      "Flow Ratio": 0.041,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 637
+    },
+    {
+      "waktu_puncak": "Day (12.00-13.00)",
+      "arm": "West",
+      "Saturation (vehicle/hour)": 3613,
+      "Flow Ratio": 0.177,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 753
+    },
+  
+    {
+      "waktu_puncak": "Evening (16.45-17.45)",
+      "arm": "North",
+      "Saturation (vehicle/hour)": 2177,
+      "Flow Ratio": 0.031,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 454
+    },
+    {
+      "waktu_puncak": "Evening (16.45-17.45)",
+      "arm": "East",
+      "Saturation (vehicle/hour)": 3517,
+      "Flow Ratio": 0.159,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 733
+    },
+    {
+      "waktu_puncak": "Evening (16.45-17.45)",
+      "arm": "South",
+      "Saturation (vehicle/hour)": 3096,
+      "Flow Ratio": 0.037,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 645
+    },
+    {
+      "waktu_puncak": "Evening (16.45-17.45)",
+      "arm": "West",
+      "Saturation (vehicle/hour)": 3618,
+      "Flow Ratio": 0.167,
+      "Cycle time(s)": 120,
+      "Green Time(s)": 25,
+      "Capacity (vehicle/hour)": 754
+    }
+  ]
+  

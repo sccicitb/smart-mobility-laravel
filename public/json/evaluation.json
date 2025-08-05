@@ -1,0 +1,17 @@
+[
+    { "Time": "Morning (07.00–08.00)", "Arm": "North", "Saturation Degree": 0.71, "Queue Length (m)": 34, "Stopped Vehicles (vehicle/hour)": 89, "Delay (s/vehicle)": 14.3, "LoS": "C" },
+    { "Time": "Morning (07.00–08.00)", "Arm": "East", "Saturation Degree": 0.82, "Queue Length (m)": 41, "Stopped Vehicles (vehicle/hour)": 103, "Delay (s/vehicle)": 17.2, "LoS": "D" },
+    { "Time": "Morning (07.00–08.00)", "Arm": "South", "Saturation Degree": 0.69, "Queue Length (m)": 31, "Stopped Vehicles (vehicle/hour)": 80, "Delay (s/vehicle)": 12.8, "LoS": "C" },
+    { "Time": "Morning (07.00–08.00)", "Arm": "West", "Saturation Degree": 0.91, "Queue Length (m)": 50, "Stopped Vehicles (vehicle/hour)": 117, "Delay (s/vehicle)": 19.7, "LoS": "E" },
+  
+    { "Time": "Day (12.00–13.00)", "Arm": "North", "Saturation Degree": 0.65, "Queue Length (m)": 29, "Stopped Vehicles (vehicle/hour)": 74, "Delay (s/vehicle)": 11.1, "LoS": "B" },
+    { "Time": "Day (12.00–13.00)", "Arm": "East", "Saturation Degree": 0.76, "Queue Length (m)": 37, "Stopped Vehicles (vehicle/hour)": 95, "Delay (s/vehicle)": 13.5, "LoS": "C" },
+    { "Time": "Day (12.00–13.00)", "Arm": "South", "Saturation Degree": 0.63, "Queue Length (m)": 26, "Stopped Vehicles (vehicle/hour)": 70, "Delay (s/vehicle)": 10.4, "LoS": "B" },
+    { "Time": "Day (12.00–13.00)", "Arm": "West", "Saturation Degree": 0.79, "Queue Length (m)": 40, "Stopped Vehicles (vehicle/hour)": 100, "Delay (s/vehicle)": 14.8, "LoS": "C" },
+  
+    { "Time": "Evening (16.45–17.45)", "Arm": "North", "Saturation Degree": 0.88, "Queue Length (m)": 49, "Stopped Vehicles (vehicle/hour)": 112, "Delay (s/vehicle)": 18.6, "LoS": "E" },
+    { "Time": "Evening (16.45–17.45)", "Arm": "East", "Saturation Degree": 0.94, "Queue Length (m)": 53, "Stopped Vehicles (vehicle/hour)": 126, "Delay (s/vehicle)": 20.3, "LoS": "F" },
+    { "Time": "Evening (16.45–17.45)", "Arm": "South", "Saturation Degree": 0.84, "Queue Length (m)": 45, "Stopped Vehicles (vehicle/hour)": 108, "Delay (s/vehicle)": 16.9, "LoS": "D" },
+    { "Time": "Evening (16.45–17.45)", "Arm": "West", "Saturation Degree": 0.90, "Queue Length (m)": 51, "Stopped Vehicles (vehicle/hour)": 120, "Delay (s/vehicle)": 19.2, "LoS": "E" }
+  ]
+  

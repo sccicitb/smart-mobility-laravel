@@ -1,0 +1,17 @@
+[
+    { "waktu_puncak": "Morning", "arah_masuk": "north", "total_IN": 2156 },
+    { "waktu_puncak": "Morning", "arah_masuk": "east", "total_IN": 3590 },
+    { "waktu_puncak": "Morning", "arah_masuk": "south", "total_IN": 3072 },
+    { "waktu_puncak": "Morning", "arah_masuk": "west", "total_IN": 3612 },
+  
+    { "waktu_puncak": "Day", "arah_masuk": "north", "total_IN": 2238 },
+    { "waktu_puncak": "Day", "arah_masuk": "east", "total_IN": 3558 },
+    { "waktu_puncak": "Day", "arah_masuk": "south", "total_IN": 3058 },
+    { "waktu_puncak": "Day", "arah_masuk": "west", "total_IN": 3613 },
+  
+    { "waktu_puncak": "Evening", "arah_masuk": "north", "total_IN": 2177 },
+    { "waktu_puncak": "Evening", "arah_masuk": "east", "total_IN": 3517 },
+    { "waktu_puncak": "Evening", "arah_masuk": "south", "total_IN": 3096 },
+    { "waktu_puncak": "Evening", "arah_masuk": "west", "total_IN": 3618 }
+  ]
+  

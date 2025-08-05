@@ -493,7 +493,8 @@
 
     // Fungsi untuk menghasilkan data analisis secara dinamis dan mengisi tabel sekaligus menyimpan data saturation
     function generateTrafficAnalysis() {
-        fetch("/api/traffic-analysis")
+        // fetch("/api/traffic-analysis")
+        fetch("/json/analysis.json")
             .then(res => res.json())
             .then(data => {
                 const timeSlots = ['Morning', 'Day', 'Evening'];
@@ -704,7 +705,8 @@
         
         // Fungsi untuk menghasilkan data analisis secara dinamis dan mengisi tabel sekaligus menyimpan data saturation
         function generateAnalysisData() {
-            fetch("/api/traffic-analysis/intersection" + "/" + localStorage.getItem("cycle_time") + "/" + localStorage.getItem("green") + "/" + localStorage.getItem("total_arms"))
+            // fetch("/api/traffic-analysis/intersection" + "/" + localStorage.getItem("cycle_time") + "/" + localStorage.getItem("green") + "/" + localStorage.getItem("total_arms"))
+            fetch("/json/intersection.json")
                 .then(res => res.json())
                 .then(rawData => {
                     const tbody = document.getElementById("analysis-table-body");
@@ -818,7 +820,7 @@
         
         // Fungsi untuk menghasilkan data evaluasi secara dinamis
         function generateEvaluationData() {
-            fetch("/api/traffic-analysis/evaluation")
+            fetch("/json/evaluation.json")
             .then(res => res.json())
             .then(data => {
                 const container = document.getElementById("evaluation-content");
@@ -870,7 +872,7 @@
             });
 
 
-            fetch("/api/traffic-analysis/summary")
+            fetch("/json/summary.json")
             .then(res => res.json())
             .then(summary => {
                 document.getElementById("peak-traffic-time").textContent = summary["Peak Traffic Time"];
