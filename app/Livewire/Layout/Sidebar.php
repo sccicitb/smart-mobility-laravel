@@ -3,6 +3,7 @@
 namespace App\Livewire\Layout;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class Sidebar extends Component
 {
@@ -13,11 +14,11 @@ class Sidebar extends Component
         $this->collapsed = session()->get('sidebar_collapsed', false);
     }
 
-    public function toggle()
+    #[On('toggleSidebar')]
+    public function toggleSidebar()
     {
         $this->collapsed = !$this->collapsed;
         session()->put('sidebar_collapsed', $this->collapsed);
-        $this->dispatch('toggle-sidebar', collapsed: $this->collapsed);
     }
 
     public function render()

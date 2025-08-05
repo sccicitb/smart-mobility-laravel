@@ -20,8 +20,7 @@
         style="background: transparent; backdrop-filter: blur(10px); height: 80px;">
         <div class="container-fluid p-5">
             <a class="navbar-brand text-white fw-bold d-flex align-items-center" href="#home">
-                <img src="{{ asset('images/IC_SMART MOBILITY.png') }}" alt="Smart Mobility" height="40"
-                    class="me-2">
+                <img src="{{ asset('images/IC_SMART MOBILITY.png') }}" alt="Smart Mobility" height="40" class="me-2">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -50,6 +49,10 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ route('simulations') }}">
+                                        <i class="fas fa-home me-2"></i>Home
+                                    </a></li>
+                                <li></li>
                                 <li><a class="dropdown-item" href="{{ route('settings') }}">
                                         <i class="fas fa-cog me-2"></i>Settings
                                     </a></li>
@@ -74,8 +77,7 @@
     </nav>
 
     <!-- First Hero Section -->
-    <div class="hero d-flex align-items-center" style="min-height: 100vh; background-attachment: scroll;"
-        id="homes">
+    <div class="hero d-flex align-items-center" style="min-height: 100vh; background-attachment: scroll;" id="homes">
         <div class="container p-5">
             <div class="row align-items-center g-5">
                 <!-- Welcome Text Column -->
@@ -97,8 +99,8 @@
                             <div class="row g-4">
                                 <div class="overview-section p-4" data-aos="fade-up">
                                     <div class="d-flex align-items-center justify-content-start gap-3 mb-4">
-                                        <img src="{{ asset('images/IC2_SMART MOBILITY.png') }}" alt="Icon"
-                                            height="32" class="me-3">
+                                        <img src="{{ asset('images/IC2_SMART MOBILITY.png') }}" alt="Icon" height="32"
+                                            class="me-3">
                                         <h4 class="text-white fw-bold m-0">Smart Mobility Simulator</h4>
                                     </div>
 
@@ -339,13 +341,11 @@
                     <div class="glass-bg p-4 d-flex align-items-center justify-content-center gap-4"
                         style="border-radius: 50px;">
                         <div class="logo-item">
-                            <img src="{{ asset('images/path_5.svg') }}" alt="Logo" height="48"
-                                class="logo-img">
+                            <img src="{{ asset('images/path_5.svg') }}" alt="Logo" height="48" class="logo-img">
                         </div>
                         <div class="logo-divider"> </div>
                         <div class="logo-item">
-                            <img src="{{ asset('images/path_4.svg') }}" alt="Logo" height="48"
-                                class="logo-img">
+                            <img src="{{ asset('images/path_4.svg') }}" alt="Logo" height="48" class="logo-img">
                         </div>
                     </div>
                 </div>
@@ -365,7 +365,7 @@
         });
 
         // Navbar scroll effect
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 50) {
                 navbar.style.background = 'rgba(0, 0, 0, 0.9)';
@@ -375,7 +375,7 @@
         });
 
         // Parallax effect for hero sections
-        document.addEventListener('scroll', function() {
+        document.addEventListener('scroll', function () {
             const parallaxElements = document.querySelectorAll('.parallax');
             parallaxElements.forEach(element => {
                 let speed = element.getAttribute('data-speed') || 0.5;
@@ -383,7 +383,7 @@
             });
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const sections = document.querySelectorAll('.hero');
             const navLinks = document.querySelectorAll('.nav-link');
 

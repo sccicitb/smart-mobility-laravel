@@ -1,8 +1,8 @@
-<div class="position-relative">
+<div class="position-relative maps-content">
     <div id="map" style="width: 100%; height: 80vh; border-radius: 10px;" wire:ignore></div>
 
     <!-- Traffic Control Panel -->
-    <div class="position-absolute top-0 end-0 m-3 p-2 bg-white rounded shadow-sm"
+    <div class="position-absolute top-0 end-0 sub-maps bg-white rounded shadow-sm"
         style="z-index: 1000; width: 250px; max-height: 80vh; overflow-y: auto;">
         <!-- Threshold Settings -->
         <div class="mb-2">

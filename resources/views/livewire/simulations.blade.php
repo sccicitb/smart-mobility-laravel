@@ -1,23 +1,15 @@
 <div>
-    <div class="position-relative overflow-hidden p-5 glass-bg" style="min-height: 80vh; height: 100%;">
-
-        <style>
-            .glass-bg {
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            }
-        </style> <!-- Background decorations -->
+    <div class="position-relative overflow-hidden p-2 page" style=" min-height: 80vh; height: 100%; margin: auto'">
         <div class="container-fluid h-100 d-flex align-items-center justify-content-center">
             <div class="row w-100 justify-content-center">
-                <div class="col-12 col-xl-10">
-                    <h1 class="display-4 text-center mb-5 fw-bold">Which Topics Do You Want to Simulate?</h1>
+                <div class="col-12 col-xl-12 wrapping">
+                    <div class="display-6 text-center fw-bold title-topic">Which Topics Do You Want to Simulate?</div>
 
-                    <div class="horizontal-accordion mx-auto">
+                    <!-- <div class="content-card horizontal-accordion mx-auto custom-card"> -->
+                    <div class="custom-card-wrapper">
                         @foreach ($simulations as $simulation)
-                            <div class="card shadow-lg"
-                                style="background-image: url('{{ asset('images/bg.png') }}'); background-size: cover; background-position: center;">
+                            <div class="card"
+                                style="background-image: url('{{ asset('images/bg.png') }}'); background-size: cover;">
                                 <div class="card-overlay"></div>
                                 <div class="card-header border-0 d-flex justify-content-center align-items-center">
                                     <img src="{{ asset('images/IC2_SMART MOBILITY.png') }}" alt="Logo"
@@ -30,8 +22,7 @@
                                         <h3 class="card-title text-white mb-4">{{ $simulation['title'] }}</h3>
                                         <p class="card-text text-white">{{ $simulation['description'] }}</p>
                                     </div>
-                                    <a href="{{ route($simulation['route']) }}"
-                                        class="btn btn-light btn-custom px-4 py-2">
+                                    <a href="{{ route($simulation['route']) }}" class="btn btn-light btn-custom px-3 py-1">
                                         Find {{ $simulation['title'] }}
                                     </a>
                                 </div>
@@ -45,32 +36,65 @@
 
     @push('styles')
         <style>
+            /* .custom-card-wrapper {
+                                display: flex;
+                                gap: 1rem;
+                                overflow-x: none;
+                                padding-bottom: 1rem;
+                            } */
+
+            .custom-card-wrapper {
+                justify-content: center;
+                /* display: grid;
+                grid-template-columns: repeat(2, 1fr); */
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .card {
+                position: relative;
+                padding: 1.5rem;
+                border-radius: 12px;
+                color: white;
+                height: 600px;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                min-height: 300px;
+            }
+
+            .page {
+                width: fit-content;
+            }
+
+            .title-topic {
+                font-size: 23px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .wrapping {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .glass-bg {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            }
+
             .horizontal-accordion {
                 display: flex;
                 width: 100%;
                 max-width: 1400px;
-                height: min(700px, calc(100vh - 200px));
-                min-height: 700px;
+                /* height: min(600px, calc(100vh - 200px)); */
+                min-height: 600px;
                 gap: 1.5rem;
                 margin: 0 auto;
-            }
-
-            .card {
-                flex: 1;
-                border: none;
-                border-radius: 1.5rem;
-                overflow: hidden;
-                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                background: linear-gradient(135deg,
-                        rgba(255, 0, 0, 0.15) 0%,
-                        rgba(255, 0, 0, 0.35) 100%);
-                backdrop-filter: blur(10px);
-                padding: 1.5rem;
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                position: relative;
             }
 
             .card-overlay {
@@ -102,8 +126,8 @@
 
             .card:hover {
                 flex: 3;
-                transform: scale(1.02) translateY(-5px);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                transform: scale(1) translateY(0px);
+                /* box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2); */
             }
 
             .card:hover .card-body {
@@ -112,10 +136,13 @@
             }
 
             .btn-custom {
+                margin-top: 20px;
+                font-size: 12px;
                 border-radius: 50px;
                 font-weight: 600;
                 text-transform: uppercase;
-                letter-spacing: 1px;
+                font-weight: bold;
+                letter-spacing: 0.8px;
                 transition: all 0.3s ease;
             }
 
@@ -173,12 +200,22 @@
                 transform: rotate(90deg);
             }
 
+            }
+
+            @media (max-width: 900px) {
+                .custom-card-wrapper {
+                    display: grid;
+                    grid-template-columns: repeat(1, 1fr);
+                    gap: 1.5rem;
+                    padding: 1rem;
+                }
+            }
+
             @media (max-width: 768px) {
                 .horizontal-accordion {
-                    min-height: auto;
                     height: auto;
                     flex-direction: column;
-                    max-height: calc(100vh - 150px);
+                    max-height: calc(100vh - 200px);
                     overflow-y: auto;
                     padding: 1rem;
                 }
@@ -192,6 +229,14 @@
                 .decoration-3 {
                     width: 150px;
                 }
+
+                .custom-card-wrapper {
+                    display: grid;
+                    grid-template-columns: repeat(1, 1fr);
+                    gap: 1.5rem;
+                    padding: 1rem;
+                }
+
             }
 
             @media (min-width: 769px) {
@@ -203,20 +248,20 @@
     @endpush
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const cards = document.querySelectorAll('.card');
 
             cards.forEach(card => {
                 const logoImage = card.querySelector('.logo');
 
-                card.addEventListener('mouseenter', function() {
-                    logoImage.src = "{{ asset('images/IC3_SMART MOBILITY.png') }}";
+                card.addEventListener('mouseenter', function () {
+                    logoImage.src = "{{ asset('images/IC_Smart Mobility_White.png') }}";
                     logoImage.style.width = '110px';
                     logoImage.classList.add('animate__animated', 'animate__pulse');
                 });
 
-                card.addEventListener('mouseleave', function() {
-                    logoImage.src = "{{ asset('images/IC2_SMART MOBILITY.png') }}";
+                card.addEventListener('mouseleave', function () {
+                    logoImage.src = "{{ asset('images/IC_Logo_Smart Mobility_White.png') }}";
                     logoImage.style.width = '50px';
                     logoImage.classList.remove('animate__animated', 'animate__pulse');
                 });
