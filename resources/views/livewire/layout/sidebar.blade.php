@@ -94,14 +94,14 @@
 <!-- @class(['collapsed' => $collapsed]) -->
 <div class="sidebar-side"
     style="background: #892120; border-radius: 0px 0px 0px 0px; overflow: hidden; width: {{ $collapsed ? '70px' : '250px' }}; transition: all 0.3s ease;">
-    <div class="d-flex flex-column align-items-stretch">
+    <div class="d-flex flex-column align-items-stretch py-[10px] gap-2">
         <!-- Toggle Button -->
         <button type="button" class="btn d-flex align-items-center" onclick="toggleSidebar(this)"
             style="border-radius: 0px 16px 0px 0px; min-height: 64px; border: none;">
 
 
             <img id="sidebarLogo" src="{{ asset('images/IC_Smart Mobility_White.png') }}" alt="Smart Mobility"
-                style="max-height: 60px;" onerror="this.style.display='none'">
+                style="height: 60px;" onerror="this.style.display='none'">
 
             <div wire:ignore class="ms-auto">
                 <i id="chevronIcon" data-lucide="chevron-left" class="text-white"></i>
@@ -115,15 +115,22 @@
         <!-- Navigation Items -->
         <div class="navside-back flex-column">
             {{-- Dashboard --}}
-            @php
+            {{-- @php
                 $isDashboardActive = Str::contains(url()->current(), 'dashboard/mobility');
-            @endphp
-            <a href="http://63.250.52.19:9091/dashboard/mobility"
+            @endphp --}}
+            {{-- <a href="http://63.250.52.19:9091/dashboard/mobility"
                 class="navside d-flex align-items-center {{ $isDashboardActive ? 'navside-active' : '' }}">
                 <div wire:ignore>
                     <i data-lucide="layout-dashboard"></i>
                 </div>
-                <span class="nav-text ms-3">{{ $collapsed ? '' : 'Dashboard' }}</span>
+                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Dashboard' }}</span>
+            </a> --}}
+            <a href="{{ route('dashboard-new') }}"
+                class="navside d-flex align-items-center {{ request()->routeIs('dashboard-new') ? 'navside-active' : '' }}">
+                <div wire:ignore>
+                    <i data-lucide="tv-minimal-play"></i>
+                </div>
+                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Dashboard' }}</span>
             </a>
 
             {{-- Simulation --}}
@@ -132,86 +139,39 @@
                 <div wire:ignore>
                     <i data-lucide="tv-minimal-play"></i>
                 </div>
-                <span class="nav-text ms-3">{{ $collapsed ? '' : 'Simulation' }}</span>
+                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Simulation' }}</span>
             </a>
 
             {{-- Maps --}}
-            <a href="{{ route('maps') }}"
+            {{-- <a href="{{ route('maps') }}"
                 class="navside d-flex align-items-center {{ request()->routeIs('maps') ? 'navside-active' : '' }}">
                 <div wire:ignore>
                     <i data-lucide="map"></i>
                 </div>
-                <span class="nav-text ms-3">{{ $collapsed ? '' : 'Maps' }}</span>
+                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Maps' }}</span>
             </a>
-            {{-- <a href="{{ route('survey') }}"
-                class="nav-link d-flex align-items-center {{ request()->routeIs('maps') ? 'active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="binoculars" class="text-white"></i>
-                </div>
-                <span class="text-white ms-3" style="display: {{ $collapsed ? 'none' : 'inline' }}">Survey</span>
-            </a> --}}
-            {{--
-            <a href="{{ route('cameras') }}"
-                class="nav-link d-flex align-items-center {{ request()->routeIs('cameras') ? 'active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="video" class="text-white"></i>
-                </div>
-                <span class="text-white ms-3" style="display: {{ $collapsed ? 'none' : 'inline' }}">Cameras</span>
-            </a>
-
-            <a href="{{ route('traffic-flow') }}"
-                class="nav-link d-flex align-items-center {{ request()->routeIs('traffic-flow') ? 'active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="traffic-cone" class="text-white"></i>
-                </div>
-                <span class="text-white ms-3" style="display: {{ $collapsed ? 'none' : 'inline' }}">Traffic Flow</span>
-            </a>
-
-            <a href="{{ route('congestions') }}"
-                class="nav-link d-flex align-items-center {{ request()->routeIs('congestions') ? 'active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="alert-triangle" class="text-white"></i>
-                </div>
-                <span class="text-white ms-3" style="display: {{ $collapsed ? 'none' : 'inline' }}">Congestion</span>
-            </a>
-
-            <a href="{{ route('intersections') }}"
-                class="nav-link d-flex align-items-center {{ request()->routeIs('intersections') ? 'active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="crosshair" class="text-white"></i>
-                </div>
-                <span class="text-white ms-3" style="display: {{ $collapsed ? 'none' : 'inline' }}">Intersections</span>
-            </a>
-
-            <a href="{{ route('travel-times') }}"
-                class="nav-link d-flex align-items-center {{ request()->routeIs('travel-times') ? 'active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="clock" class="text-white"></i>
-                </div>
-                <span class="text-white ms-3" style="display: {{ $collapsed ? 'none' : 'inline' }}">Travel Time</span>
-            </a> --}}
 
             <a href="{{ route('tutorial') }}"
                 class="navside d-flex align-items-center {{ request()->routeIs('tutorial') ? 'navside-active' : '' }}">
                 <div wire:ignore>
                     <i data-lucide="book-open"></i>
                 </div>
-                <span class="nav-text ms-3">{{ $collapsed ? '' : 'Tutorial' }}</span>
+                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Tutorial' }}</span>
             </a>
             <a href="{{ route('settings') }}"
                 class="navside d-flex align-items-center {{ request()->routeIs('settings') ? 'navside-active' : '' }}">
                 <div wire:ignore>
                     <i data-lucide="settings"></i>
                 </div>
-                <span class="nav-text ms-3">{{ $collapsed ? '' : 'Settings' }}</span>
-            </a>
+                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Settings' }}</span>
+            </a> --}}
             <a href="{{ route('logout') }}" class="navside d-flex align-items-center"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <div wire:ignore>
                     <i data-lucide="log-out"></i>
                 </div>
-                <span class="nav-text ms-3">{{ $collapsed ? '' : 'Logout' }}</span>
-            </a>
+                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Logout' }}</span>
+            </a> 
             <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
                 @csrf
             </form>

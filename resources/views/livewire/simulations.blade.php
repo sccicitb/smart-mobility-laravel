@@ -1,4 +1,4 @@
-<div>
+<div class="content-card">
     <div class="position-relative overflow-hidden p-2 page" style=" min-height: 80vh; height: 100%; margin: auto'">
         <div class="container-fluid h-100 d-flex align-items-center justify-content-center">
             <div class="row w-100 justify-content-center">

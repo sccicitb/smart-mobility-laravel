@@ -117,13 +117,6 @@
     margin-left: 70px;
 }
 
-.main-content {
-    padding: 20px;
-    width: 100%;
-    margin-top: 70px;
-    min-height: calc(100vh - 70px);
-    background: #f5f5f5;
-}
 
 /* .main-navbar {
     position: fixed;
@@ -506,7 +499,7 @@
 
 /* Layout */
 .wrapper {
-    min-height: 100vh;
+    min-height: 90vh;
 }
 
 .sidebar {

@@ -17,6 +17,7 @@ use App\Livewire\Dashboard;
 use App\Http\Controllers\IntersectionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Livewire\DashboardNew;
 
 // Public routes
 Route::get('/', function () {
@@ -50,6 +51,8 @@ Route::get('/simulations/intersections-check', [IntersectionController::class, '
 
 Route::get('/survey', SurveyPage::class)->name('survey');
 Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+Route::get(uri: '/dashboard-new', action: DashboardNew::class)->name(name: 'dashboard-new');
 
 Route::get('/api/traffic-data', function (Request $request) {
     // $origin = $request->query('origin', 'all');
