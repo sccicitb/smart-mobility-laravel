@@ -49,7 +49,7 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ route('simulations') }}">
+                                <li><a class="dropdown-item" href="{{ route('dashboard-new') }}">
                                         <i class="fas fa-home me-2"></i>Home
                                     </a></li>
                                 <li></li>
