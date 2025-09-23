@@ -50,9 +50,9 @@ Route::get('/simulations/intersections-check', [IntersectionController::class, '
 
 
 Route::get('/survey', SurveyPage::class)->name('survey');
-Route::get('/dashboard', Dashboard::class)->name('dashboard');
+// Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-Route::get(uri: '/dashboard-new', action: DashboardNew::class)->name(name: 'dashboard-new');
+Route::get(uri: '/dashboard', action: DashboardNew::class)->name(name: 'dashboard');
 
 Route::get('/api/traffic-data', function (Request $request) {
     // $origin = $request->query('origin', 'all');

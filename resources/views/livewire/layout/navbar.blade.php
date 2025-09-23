@@ -5,10 +5,10 @@
         <!-- Breadcrumb -->
         <div class="justify-start items-center p-[10px]">
             <div class="d-flex align-items-center">
-                <h5 class="text-white mb-0">{{ $pageTitle }}</h5>
+                {{-- <h5 class="text-white mb-0">{{ $pageTitle }}</h5> --}}
                 <nav aria-label="breadcrumb" class="ms-2">
                     <ol class="breadcrumb mb-0 bg-transparent">
-                        <li class="breadcrumb-item"><a href="/" class="text-white-50">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/dashboard" class="text-white-50">Home</a></li>
                         @foreach ($breadcrumbs as $breadcrumb)
                             <li class="breadcrumb-item text-white-50">{{ $breadcrumb }}</li>
                         @endforeach
