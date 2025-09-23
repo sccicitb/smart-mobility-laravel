@@ -6,6 +6,8 @@ use Livewire\Component;
 class DashboardNew extends Component
 {
     public $title = "Dashboard";
+    public $titleBar = "Intersection Traffic Flow per Vehicle Type";
+    public $descriptionWelcome = "Smart Mobility Simulator is a powerful tool that replicates traffic flow at intersections. It uses real-time traffic data from video analytics, allowing users to instantly manipulate variables like traffic light timing and lane width in a safe virtual environment. It's a virtual 'laboratory' to test scenarios without the risk or cost of physical implementation.";
     public $filter = 'today';
     public $data = [
         'carbon' => 0,
