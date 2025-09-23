@@ -3,7 +3,7 @@
      x-init="$nextTick(() => { lucide.createIcons() })">
     <div>
         <h3 class="text-gray-700 font-semibold text-lg">{{ $title }}</h3>
-        <p class="text-2xl font-bold text-gray-900">
+        <p class="text-2xl font-bold text-gray-700">
             @if(is_numeric($value))
                 {{ number_format($value, 0, ',', '.') }}
             @else

@@ -22,7 +22,8 @@ class Login extends Component
             'password' => 'required',
         ]);
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {    
+            session()->flash('welcome', 'Welcome back,  ' . Auth::user()->name . '!');
             return redirect()->route('dashboard');
         }
 
@@ -222,7 +223,8 @@ class Login extends Component
                 'sso_token_type' => $responseData['token_type'] ?? 'Bearer'
             ]);
 
-            return redirect()->route("dashboard")->with('success', 'Login berhasil!');
+            return redirect()->route("dashboard")->with('success', 'Login berhasil!')->with('welcome', 'Welcome back,  ' . $user->name . '!');
+
         } catch (\Exception $e) {
             \Log::error('SSO Authentication Error', [
                 'message' => $e->getMessage(),
