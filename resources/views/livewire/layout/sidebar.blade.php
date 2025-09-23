@@ -125,8 +125,8 @@
                 </div>
                 <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Dashboard' }}</span>
             </a> --}}
-            <a href="{{ route('dashboard-new') }}"
-                class="navside d-flex align-items-center {{ request()->routeIs('dashboard-new') ? 'navside-active' : '' }}">
+            <a href="{{ route('dashboard') }}"
+                class="navside d-flex align-items-center {{ request()->routeIs('dashboard') ? 'navside-active' : '' }}">
                 <div wire:ignore>
                     <i data-lucide="tv-minimal-play"></i>
                 </div>
