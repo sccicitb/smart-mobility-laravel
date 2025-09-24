@@ -134,3 +134,12 @@ table {
   overflow: hidden;
 }
 
+/* .highlighted-step {
+  box-shadow: 0 0 0 4px rgba(255, 255, 0, 0.6);
+  border-radius: 0.5rem;
+  position: relative;
+  z-index: 50;
+}
+#guideModal {
+  z-index: 1000;
+} */

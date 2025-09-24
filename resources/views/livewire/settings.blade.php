@@ -24,6 +24,7 @@
     .card-title {
         color: #9c2524;
     }
+
     .title {
         color: #9c2524;
     }
@@ -34,8 +35,8 @@
     <!-- Tabs Navigation -->
     <ul class="nav nav-tabs" id="myTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="setting-tab" data-bs-toggle="tab" data-bs-target="#setting"
-                type="button" role="tab">Pengaturan</button>
+            <button class="nav-link active" id="setting-tab" data-bs-toggle="tab" data-bs-target="#setting" type="button"
+                role="tab">Pengaturan</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="general-setting-tab" data-bs-toggle="tab" data-bs-target="#general-setting"
