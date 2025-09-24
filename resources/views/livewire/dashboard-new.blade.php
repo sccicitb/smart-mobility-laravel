@@ -288,7 +288,7 @@
                         break;
                     case "bottom":
                         top = rect.bottom + scrollY + 10;
-                        left = rect.left + scrollX + rect.width / 2 - dialog.offsetWidth / 2;
+                        left = rect.left + scrollX;
                         break;
                     case "bottom-left":
                         top = rect.bottom + scrollY + 10;
@@ -323,8 +323,12 @@
                 modal.style.left = window.innerWidth / 2 - dialog.offsetWidth / 2 + 'px';
             }
 
+            // Update button states
             btnPrev.disabled = stepIndex === 0;
+            btnPrev.classList.toggle('cursor-not-allowed', stepIndex === 0);
             btnNext.textContent = (stepIndex === steps.length - 1) ? "Finish" : "Next";
+
+            console.log(`Showing step ${stepIndex + 1}/${steps.length}: ${step.title}`);
         }
 
         btnNext.addEventListener('click', () => {
@@ -350,11 +354,17 @@
             overlay.classList.add('hidden');
             document.querySelectorAll('.highlighted-step')
                 .forEach(el => el.classList.remove('highlighted-step', 'relative', 'z-50'));
+
+            // RESET currentStep ketika guide ditutup
+            currentStep = 0;
+            console.log('Guide closed and reset');
         }
 
         function startGuide() {
             console.log('Starting guide...'); // Debug
-            showStep(0);
+            // RESET currentStep setiap kali guide dimulai
+            currentStep = 0;
+            showStep(currentStep);
         }
 
         // Handle welcome modal close dan mulai guide
@@ -379,14 +389,9 @@
                     }, 300);
                 });
             }
-        @else
-            // Jika tidak ada welcome modal, langsung mulai guide jika diperlukan
-            // startGuide(); // Uncomment ini jika ingin auto-start tanpa welcome
         @endif
 
-        // Expose function untuk debugging
-        // window.startGuide = startGuide;
-
+        // Event listeners untuk guide buttons
         const startGuideBtn = document.getElementById('startGuideBtn');
         const restartGuideBtn = document.getElementById('restartGuideBtn');
 
@@ -400,16 +405,19 @@
         if (restartGuideBtn) {
             restartGuideBtn.addEventListener('click', function() {
                 console.log('Restart guide button clicked');
-                currentStep = 0; // Reset ke step pertama
-                startGuide();
+                startGuide(); // startGuide sudah reset currentStep ke 0
             });
         }
 
         // Expose function untuk debugging
         window.startGuide = startGuide;
-        window.restartGuide = function() {
+        window.closeGuide = closeGuide;
+        window.resetGuide = function() {
             currentStep = 0;
-            startGuide();
+            console.log('Guide manually reset');
+        };
+        window.getCurrentStep = function() {
+            return currentStep;
         };
     });
 </script>
