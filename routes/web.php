@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [Login::class, 'destroy'])->name('logout');
     Route::get('/maps', Maps::class)->name('maps');
     Route::get('/simulations', Simulations::class)->name('simulations');
+    Route::get(uri: '/dashboard', action: DashboardNew::class)->name(name: 'dashboard');
 });
 // Route::get('/dashboard', Dashboard::class)->name('dashboard-legacy');
 Route::get('/intersections', Intersections::class)->name('intersections');
@@ -52,7 +53,6 @@ Route::get('/simulations/intersections-check', [IntersectionController::class, '
 Route::get('/survey', SurveyPage::class)->name('survey');
 // Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-Route::get(uri: '/dashboard', action: DashboardNew::class)->name(name: 'dashboard');
 
 Route::get('/api/traffic-data', function (Request $request) {
     // $origin = $request->query('origin', 'all');

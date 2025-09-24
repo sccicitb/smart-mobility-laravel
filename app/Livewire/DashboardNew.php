@@ -5,6 +5,7 @@ use Livewire\Component;
 
 class DashboardNew extends Component
 {
+    protected $middleware = ['auth'];
     public $title = "Dashboard";
     public $titleBar = "Intersection Traffic Flow per Vehicle Type";
     public $descriptionWelcome = "Smart Mobility Simulator is a powerful tool that replicates traffic flow at intersections. It uses real-time traffic data from video analytics, allowing users to instantly manipulate variables like traffic light timing and lane width in a safe virtual environment. It's a virtual 'laboratory' to test scenarios without the risk or cost of physical implementation.";
@@ -20,7 +21,19 @@ class DashboardNew extends Component
     {
         $this->loadData();
         $this->loadVehicleData();
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            \Log::info('User Login Info', ['user' => $user]);
+        }
+
+        $allSession = session()->all();
+        \Log::info('Session Data', $allSession);
+
+        $laravelSessionId = session()->getId();
+        \Log::info('Laravel Session ID', ['id' => $laravelSessionId]);
     }
+
     public function setFilter($filter)
     {
         $this->filter = $filter;
@@ -28,7 +41,7 @@ class DashboardNew extends Component
 
         $this->dispatch('$refresh');
         $this->dispatch('dataUpdated', $this->data);
-        $this->dispatch('filterChanged', $this->filter); 
+        $this->dispatch('filterChanged', $this->filter);
     }
     public function loadVehicleData()
     {
