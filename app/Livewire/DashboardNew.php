@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 use Livewire\Component;
-
+// use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 class DashboardNew extends Component
 {
     protected $middleware = ['auth'];
@@ -15,32 +17,123 @@ class DashboardNew extends Component
         'energy' => 0,
         'water' => 0,
     ];
+    public $data_emisi = [];
+    public $tanggal;
     public $vehicleData = [];
 
-    public function mount()
+    // public function mount()
+    // {
+    //     $this->loadData();
+    //     $this->loadVehicleData();
+
+    //     if (auth()->check()) {
+    //         $user = auth()->user();
+    //         \Log::info('User Login Info', ['user' => $user]);
+    //     }
+
+    //     $allSession = session()->all();
+    //     \Log::info('Session Data', $allSession);
+
+    //     $laravelSessionId = session()->getId();
+    //     \Log::info('Laravel Session ID', ['id' => $laravelSessionId]);
+
+    //     // default hari ini
+    //     $this->tanggal = '2025-09-11';
+    //     $this->fetchData();
+    // }
+
+    public $cost = 0;
+    public $los = '';
+
+    public function fetchData()
     {
-        $this->loadData();
-        $this->loadVehicleData();
-
-        if (auth()->check()) {
-            $user = auth()->user();
-            \Log::info('User Login Info', ['user' => $user]);
-        }
-
-        $allSession = session()->all();
-        \Log::info('Session Data', $allSession);
-
-        $laravelSessionId = session()->getId();
-        \Log::info('Laravel Session ID', ['id' => $laravelSessionId]);
+        $key = "emisi_{$this->filter}";
+    
+        $this->data_emisi = Cache::remember($key, now()->addMinutes(10), function () {
+            $query = DB::table('arus as a')
+                ->leftJoin('jarak_simpang as j', function ($join) {
+                    $join->on('a.ID_Simpang', '=', 'j.ID_Simpang')
+                        ->on('a.dari_arah', '=', 'j.dari_arah')
+                        ->on('a.ke_arah', '=', 'j.ke_arah')
+                        ->where('j.status', '=', 'aktif');
+                })
+                ->selectRaw("SUM(
+                    (a.SM * 80 * j.jarak_km) + 
+                    (a.MP * 180 * j.jarak_km) + 
+                    (a.AUP * 350 * j.jarak_km) + 
+                    (a.TR * 250 * j.jarak_km) + 
+                    (a.BS * 800 * j.jarak_km) + 
+                    (a.TS * 400 * j.jarak_km) + 
+                    (a.TB * 600 * j.jarak_km) + 
+                    (a.BB * 1200 * j.jarak_km) + 
+                    (a.GANDENG * 900 * j.jarak_km)
+                ) / 1000 AS total_emisi_co2_kg,
+                
+                SUM(
+                    (a.SM * 10 + a.MP * 20 + 
+                     (a.AUP + a.TR + a.BS + a.TS + a.TB + a.BB + a.GANDENG) * 40
+                    ) * j.jarak_km
+                ) AS total_kerugian_ribu_rp
+                ")
+                ->whereNotNull('j.jarak_km');
+    
+            if ($this->filter === 'today') {
+                $query->whereDate('a.waktu', today());
+            } elseif ($this->filter === 'week') {
+                $query->whereBetween('a.waktu', [now()->startOfWeek(), now()->endOfWeek()]);
+            } elseif ($this->filter === 'month') {
+                $query->whereMonth('a.waktu', now()->month)
+                      ->whereYear('a.waktu', now()->year);
+            }
+    
+            $result = $query->first();
+    
+            $emisi = $result->total_emisi_co2_kg ?? 0;   // Kg
+            $cost  = $result->total_kerugian_ribu_rp ?? 0; // ribu Rp
+    
+            // ✅ Tentukan LOS
+            if ($emisi < 1000 && $cost < 50000) {
+                $los = 'A';
+            } elseif ($emisi < 5000 && $cost < 200000) {
+                $los = 'B';
+            } elseif ($emisi < 10000 && $cost < 500000) {
+                $los = 'C';
+            } elseif ($emisi < 20000 && $cost < 1000000) {
+                $los = 'D';
+            } else {
+                $los = 'E';
+            }
+    
+            $this->cost = $cost;
+            $this->los  = $los;
+    
+            return [
+                'total' => $emisi,
+                'cost'  => $cost,
+                'los'   => $los,
+            ];
+        });
+    
+        $this->dispatch('emisiData', [
+            'data' => $this->data_emisi,
+            'cost' => $this->cost,
+            'los'  => $this->los, 
+        ]);
     }
 
     public function setFilter($filter)
     {
         $this->filter = $filter;
         $this->loadData();
+        $this->fetchData();
 
         $this->dispatch('$refresh');
         $this->dispatch('dataUpdated', $this->data);
+        $this->dispatch('emisiData', [
+            'data' => $this->data_emisi,
+            'cost' => $this->cost,
+            'los' => $this->los,
+        ]);
         $this->dispatch('filterChanged', $this->filter);
     }
     public function loadVehicleData()
@@ -79,6 +172,7 @@ class DashboardNew extends Component
             ]
         ];
     }
+
     public function loadData()
     {
         if ($this->filter === 'today') {
@@ -110,9 +204,24 @@ class DashboardNew extends Component
         $this->title = "word";
     }
 
+    public function mount()
+    {
+        $this->loadData();
+        $this->loadVehicleData();
+        $this->tanggal = today()->toDateString();
+        // jangan langsung fetchData()
+    }
+
     public function render()
     {
         return view('livewire.dashboard-new');
-        // ->layout('layouts.app');
     }
+
+    public function hydrate()
+    {
+        if (empty($this->data_emisi)) {
+            $this->fetchData();
+        }
+    }
+
 }

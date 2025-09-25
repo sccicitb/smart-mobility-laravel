@@ -93,7 +93,13 @@
         });
     </script>
     <!-- ... kode lainnya ... -->
-
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
     <script>
         window.addEventListener('livewire:init', () => {
             Livewire.on('toggle-sidebar', (event) => {
