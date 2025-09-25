@@ -5,6 +5,7 @@ use Livewire\Component;
 // use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 class DashboardNew extends Component
 {
     protected $middleware = ['auth'];
@@ -20,6 +21,8 @@ class DashboardNew extends Component
     public $data_emisi = [];
     public $tanggal;
     public $vehicleData = [];
+    
+    public $selectedDate = '';
 
     // public function mount()
     // {
@@ -126,7 +129,7 @@ class DashboardNew extends Component
         $this->filter = $filter;
         $this->loadData();
         $this->fetchData();
-
+        $this->dispatch('filterChanged', $filter, $this->selectedDate);
         $this->dispatch('$refresh');
         $this->dispatch('dataUpdated', $this->data);
         $this->dispatch('emisiData', [
@@ -135,6 +138,13 @@ class DashboardNew extends Component
             'los' => $this->los,
         ]);
         $this->dispatch('filterChanged', $this->filter);
+    }
+    public function changeDate($newDate)
+    {
+        $this->selectedDate = $newDate;
+        
+        // Emit ke semua chart components
+        $this->dispatch('filterChanged', $this->filter, $this->selectedDate);
     }
     public function loadVehicleData()
     {
@@ -206,6 +216,7 @@ class DashboardNew extends Component
 
     public function mount()
     {
+        $this->selectedDate = Carbon::today()->format('Y-m-d');
         $this->loadData();
         $this->loadVehicleData();
         $this->tanggal = today()->toDateString();
