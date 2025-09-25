@@ -104,15 +104,15 @@
     <!-- Stats Cards - TETAP SAMA, tidak diubah -->
     <div class="w-full lg:flex gap-7">
         <div class="w-full lg:w-1/2 grid grid-cols-1 xl:grid-cols-2 mb-7 lg:mb-0 gap-7" id="statsCards">
-            @livewire(
+            {{-- @livewire(
                 'component.cards.stats-card',
                 [
                     'title' => 'Carbon Emissions',
-                    'value' => $data['carbon'],
+                    'value' => $data_emisi['total'] ?? '0',
                     'unit' => 'Kg',
                     'icon' => 'wind',
                 ],
-                key("carbon-{$filter}")
+                key('stats-card-carbon')
             )
 
             @livewire(
@@ -146,7 +146,19 @@
                     'icon' => 'circle-dollar-sign',
                 ],
                 key("cost-{$filter}")
-            )
+            ) --}}
+            <livewire:component.cards.stats-card :title="'Carbon Emissions'" :value="$data_emisi['total'] ?? 0" :unit="'Kg'" :icon="'wind'"
+                :key="'dashboard-stats-card-carbon-' . $filter" />
+
+            <livewire:component.cards.stats-card :title="'Level of Service'" :value="$data_emisi['los'] ?? '-'"
+                :unit="''" :icon="'arrows-up-from-line'" :key="'dashboard-service-' . $filter" />
+
+            <livewire:component.cards.stats-card :title="'Peak Flow Time'" :value="$data['peak'] ?? '-'" :unit="''"
+                :icon="'clock'" :key="'dashboard-peak-' . $filter" />
+
+            <livewire:component.cards.stats-card :title="'Total Losses'" :value="$data_emisi['cost'] ?? '-'" :unit="'Ribu Rp'"
+                {{-- ✅ kasih unit biar jelas --}} :icon="'circle-dollar-sign'" :key="'dashboard-cost-' . $filter" />
+
         </div>
 
         <!-- Placeholder card -->
@@ -211,6 +223,11 @@
     position: "center"
 }, --}}
 <script>
+    window.addEventListener('emisiData', event => {
+        // console.log("Data Emisi:", event.detail[0].data[0].total_emisi_co2_kg_hari_ini);
+        console.log("Data Emisi:", event.detail);
+    });
+
     document.addEventListener("DOMContentLoaded", function() {
         const steps = [{
                 element: document.getElementById('filterButtons'),
