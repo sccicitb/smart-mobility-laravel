@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
+use App\Services\VehicleQuery;
 class DashboardNew extends Component
 {
     protected $middleware = ['auth'];
@@ -21,7 +22,7 @@ class DashboardNew extends Component
     public $data_emisi = [];
     public $tanggal;
     public $vehicleData = [];
-    
+
     public $selectedDate = '';
 
     // public function mount()
@@ -51,7 +52,7 @@ class DashboardNew extends Component
     public function fetchData()
     {
         $key = "emisi_{$this->filter}";
-    
+
         $this->data_emisi = Cache::remember($key, now()->addMinutes(10), function () {
             $query = DB::table('arus as a')
                 ->leftJoin('jarak_simpang as j', function ($join) {
@@ -79,21 +80,21 @@ class DashboardNew extends Component
                 ) AS total_kerugian_ribu_rp
                 ")
                 ->whereNotNull('j.jarak_km');
-    
+
             if ($this->filter === 'today') {
                 $query->whereDate('a.waktu', today());
             } elseif ($this->filter === 'week') {
                 $query->whereBetween('a.waktu', [now()->startOfWeek(), now()->endOfWeek()]);
             } elseif ($this->filter === 'month') {
                 $query->whereMonth('a.waktu', now()->month)
-                      ->whereYear('a.waktu', now()->year);
+                    ->whereYear('a.waktu', now()->year);
             }
-    
+
             $result = $query->first();
-    
+
             $emisi = $result->total_emisi_co2_kg ?? 0;   // Kg
-            $cost  = $result->total_kerugian_ribu_rp ?? 0; // ribu Rp
-    
+            $cost = $result->total_kerugian_ribu_rp ?? 0; // ribu Rp
+
             // ✅ Tentukan LOS
             if ($emisi < 1000 && $cost < 50000) {
                 $los = 'A';
@@ -106,21 +107,21 @@ class DashboardNew extends Component
             } else {
                 $los = 'E';
             }
-    
+
             $this->cost = $cost;
-            $this->los  = $los;
-    
+            $this->los = $los;
+
             return [
                 'total' => $emisi,
-                'cost'  => $cost,
-                'los'   => $los,
+                'cost' => $cost,
+                'los' => $los,
             ];
         });
-    
+
         $this->dispatch('emisiData', [
             'data' => $this->data_emisi,
             'cost' => $this->cost,
-            'los'  => $this->los, 
+            'los' => $this->los,
         ]);
     }
 
@@ -129,6 +130,7 @@ class DashboardNew extends Component
         $this->filter = $filter;
         $this->loadData();
         $this->fetchData();
+        $this->loadVehicleData();
         $this->dispatch('filterChanged', $filter, $this->selectedDate);
         $this->dispatch('$refresh');
         $this->dispatch('dataUpdated', $this->data);
@@ -139,49 +141,86 @@ class DashboardNew extends Component
         ]);
         $this->dispatch('filterChanged', $this->filter);
     }
-    public function changeDate($newDate)
-    {
-        $this->selectedDate = $newDate;
-        
-        // Emit ke semua chart components
-        $this->dispatch('filterChanged', $this->filter, $this->selectedDate);
-    }
     public function loadVehicleData()
     {
+        // Tentukan start & end date
+        if ($this->filter === 'today') {
+            $start = $end = Carbon::today()->format('Y-m-d');
+        } elseif ($this->filter === 'week') {
+            $start = Carbon::now()->startOfWeek()->format('Y-m-d');
+            $end = Carbon::now()->endOfWeek()->format('Y-m-d');
+        } elseif ($this->filter === 'month') {
+            $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+        } else {
+            $start = $end = Carbon::today()->format('Y-m-d');
+        }
+
+        $data = VehicleQuery::getVehicleData($start, $end);
+
+        if (!$data) {
+            $data = (object) [];
+        }
+
+        $vehicleTypes = [
+            'SM' => 'Motor',
+            'MP' => 'Mobil',
+            'BS' => 'Bus',
+            'TR' => 'Truk',
+            'AUP' => 'AUP',
+            'TB' => 'TB',
+            'BB' => 'BB',
+            'GANDENG' => 'Gandeng',
+            'KTB' => 'KTB',
+        ];
+
+        // Ikon per jenis kendaraan
+        $vehicleIcons = [
+            'SM' => 'bike',
+            'MP' => 'car',
+            'BS' => 'bus',
+            'TR' => 'truck',
+            'AUP' => 'car-front',
+            'TB' => 'truck',
+            'BB' => 'package',
+            'GANDENG' => 'truck',
+            'KTB' => 'truck',
+        ];
+
+
+
+        $incoming = [];
+        $outgoing = [];
+
+        foreach ($vehicleTypes as $col => $label) {
+            $incoming[] = (int) ($data->{$col . '_masuk'} ?? 0);
+            $outgoing[] = (int) ($data->{$col . '_keluar'} ?? 0);
+        }
+
+        $incomingTotal = array_sum($incoming);
+        $outgoingTotal = array_sum($outgoing);
         $this->vehicleData = [
             'incomingVehicles' => [
-                'labels' => ['Motor', 'Mobil', 'Bus', 'Truk'],
-                'values' => [120, 90, 15, 8],
-                'percentages' => ['55%', '35%', '7%', '3%'],
-                'vehicleTypes' => ['Motor', 'Mobil', 'Bus', 'Truk'],
-                'tooltipLabels' => ['Motor', 'Mobil', 'Bus', 'Truk'],
-                'color' => '#bd3a39',
-                'directionRoad' => ['Utara', 'Timur', 'Selatan', 'Barat'],
-                // kalau mau pakai icon tinggal kasih HTML / SVG string di sini
-                'iconComponents' => [
-                    '<i class="fa-solid fa-motorcycle"></i>',
-                    '<i class="fa-solid fa-car"></i>',
-                    '<i class="fa-solid fa-bus"></i>',
-                    '<i class="fa-solid fa-truck"></i>',
-                ]
+                'labels' => array_values($vehicleTypes),
+                'values' => $incoming,
+                'percentages' => array_map(fn($v) => $incomingTotal ? round($v / $incomingTotal * 100) . '%' : '0%', $incoming),
+                'iconComponents' => array_values($vehicleIcons),
             ],
             'outgoingVehicles' => [
-                'labels' => ['Motor', 'Mobil', 'Bus', 'Truk'],
-                'values' => [110, 70, 12, 5],
-                'percentages' => ['58%', '30%', '8%', '4%'],
-                'vehicleTypes' => ['Motor', 'Mobil', 'Bus', 'Truk'],
-                'tooltipLabels' => ['Motor', 'Mobil', 'Bus', 'Truk'],
-                'color' => '#bd3a39',
-                'directionRoad' => ['Barat', 'Selatan', 'Timur', 'Utara'],
-                'iconComponents' => [
-                    '<i class="fa-solid fa-motorcycle"></i>',
-                    '<i class="fa-solid fa-car"></i>',
-                    '<i class="fa-solid fa-bus"></i>',
-                    '<i class="fa-solid fa-truck"></i>',
-                ]
+                'labels' => array_values($vehicleTypes),
+                'values' => $outgoing,
+                'percentages' => array_map(fn($v) => $outgoingTotal ? round($v / $outgoingTotal * 100) . '%' : '0%', $outgoing),
+                'iconComponents' => array_values($vehicleIcons),
             ]
         ];
+
+
+        // Emit ke chart Livewire
+        $this->dispatch('vehicleDataUpdated', $this->vehicleData);
     }
+
+
+
 
     public function loadData()
     {
