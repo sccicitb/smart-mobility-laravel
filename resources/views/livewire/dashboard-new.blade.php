@@ -150,8 +150,8 @@
             <livewire:component.cards.stats-card :title="'Carbon Emissions'" :value="$data_emisi['total'] ?? 0" :unit="'Kg'" :icon="'wind'"
                 :key="'dashboard-stats-card-carbon-' . $filter" />
 
-            <livewire:component.cards.stats-card :title="'Level of Service'" :value="$data_emisi['los'] ?? '-'"
-                :unit="''" :icon="'arrows-up-from-line'" :key="'dashboard-service-' . $filter" />
+            <livewire:component.cards.stats-card :title="'Level of Service'" :value="$data_emisi['los'] ?? '-'" :unit="''" :icon="'arrows-up-from-line'"
+                :key="'dashboard-service-' . $filter" />
 
             <livewire:component.cards.stats-card :title="'Peak Flow Time'" :value="$data['peak'] ?? '-'" :unit="''"
                 :icon="'clock'" :key="'dashboard-peak-' . $filter" />
@@ -169,8 +169,9 @@
                     @livewire(
                         'component.cards.bar-vehicle',
                         [
+                            'id' => 'bar-chart-incoming-' . uniqid(),
                             'positionText' => true,
-                            'chartData' => $vehicleData['incomingVehicles'],
+                            'chartData' => $vehicleData['incomingVehicles'] ?? [],
                         ],
                         key('bar-vehicle-incoming')
                     )
@@ -179,8 +180,9 @@
                     @livewire(
                         'component.cards.bar-vehicle',
                         [
+                            'id' => 'bar-chart-outgoing-' . uniqid(),
                             'positionText' => false,
-                            'chartData' => $vehicleData['outgoingVehicles'],
+                            'chartData' => $vehicleData['outgoingVehicles'] ?? [],
                         ],
                         key('bar-vehicle-outgoing')
                     )
@@ -222,6 +224,14 @@
     desc: "{{ $descriptionWelcome }}",
     position: "center"
 }, --}}
+<script>
+    document.addEventListener("livewire:init", () => {
+        Livewire.on("vehicleDataUpdated", (vehicleData) => {
+            console.log("Vehicle Data:", vehicleData);
+        });
+    });
+</script>
+
 <script>
     window.addEventListener('emisiData', event => {
         // console.log("Data Emisi:", event.detail[0].data[0].total_emisi_co2_kg_hari_ini);

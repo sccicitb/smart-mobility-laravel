@@ -23,7 +23,7 @@
 
     <!-- Video.js JS -->
     <script src="https://unpkg.com/video.js/dist/video.js"></script>
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="{{ asset('css/custom-app.css') }}">
@@ -64,19 +64,6 @@
     @endif
 
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        // Reinitialize icons after Livewire updates
-        document.addEventListener('livewire:initialized', () => {
-            lucide.createIcons();
-            console.log('Livewire initialized');
-        });
-
-        document.addEventListener('livewire:navigated', () => {
-            lucide.createIcons();
-        });
-
         // Listen for sidebar toggle events
         Livewire.on('toggle-sidebar', (data) => {
             const contentWrapper = document.querySelector('.content-wrapper');
@@ -86,27 +73,8 @@
                 contentWrapper.classList.remove('collapsed');
             }
         });
+    </script>
 
-        // Reinitialize icons after any Livewire update
-        Livewire.hook('message.processed', (message, component) => {
-            lucide.createIcons();
-        });
-    </script>
-    <!-- ... kode lainnya ... -->
- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        });
-    </script>
-    <script>
-        window.addEventListener('livewire:init', () => {
-            Livewire.on('toggle-sidebar', (event) => {
-                console.log('Sidebar collapsed:', event.collapsed);
-            });
-        });
-    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -118,6 +86,22 @@
                 }
             }
         }
+    </script>
+
+    <script>
+        document.addEventListener("livewire:navigated", () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+
+        document.addEventListener("livewire:load", () => {
+            Livewire.hook('message.processed', (message, component) => {
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            });
+        });
     </script>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
