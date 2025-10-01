@@ -24,7 +24,7 @@ class BarVehicle extends Component
     public function vehicleDataUpdated($data)
     {
         $this->chartData = $data;
-
+        $this->dispatch('chart-loading', true);
         // Make sure chartId is set before dispatching
         if (empty($this->chartId)) {
             $this->chartId = 'bar-chart-' . uniqid();
@@ -36,6 +36,8 @@ class BarVehicle extends Component
             data: $this->chartData,
             positionText: $this->positionText
         );
+
+        $this->dispatch('chart-loading', false);
     }
 
     public function render()

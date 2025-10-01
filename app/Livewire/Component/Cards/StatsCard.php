@@ -35,6 +35,7 @@ class StatsCard extends Component
         //     $this->value = $payload['data']['cos'] ?? 0;
         // }
     }
+    public string|null $link = null;
 
     // Event listener for dataUpdated dispatch
     public function dataUpdated($data)
