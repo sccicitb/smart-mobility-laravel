@@ -1,11 +1,32 @@
 <div class="px-6 flex flex-col w-full gap-4">
+    <div wire:loading class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999]">
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-4 max-w-sm">
+            <!-- Spinner -->
+            <div class="relative">
+                <div class="w-16 h-16 border-4 border-gray-200 rounded-full"></div>
+                <div
+                    class="w-16 h-16 border-4 border-[#16598b] border-t-transparent rounded-full animate-spin absolute top-0">
+                </div>
+            </div>
+
+            <!-- Loading Text -->
+            <div class="text-center">
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">Loading Data...</h3>
+                <p class="text-sm text-gray-600">Please wait while we fetch the latest information</p>
+            </div>
+        </div>
+    </div>
+
     @if (session('welcome'))
         <div id="welcomeModal"
             class="fixed inset-0 bg-black backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50">
             <div
                 class="bg-[#16598b] px-10 py-5 rounded-2xl shadow-lg p-6 w-11/12 max-w-4xl text-center overflow-y-auto max-h-[90%]">
                 <p class="text-white">{{ session('welcome') }}</p>
-                <h2 class="text-3xl font-semibold mb-4 text-gray-800 text-white">Welcome to Smart Mobility Simulator</h2>
+                <h2 class="text-3xl font-semibold mb-4 text-gray-800 text-white">Welcome to Smart Mobility Simulator
+                </h2>
                 <div class="w-full flex flex-col md:flex-row lg:flex-col">
                     <div class="text-white w-full text-justify text-lg">{{ $descriptionWelcome }}</div>
                     <div class="w-full flex flex-col lg:flex-row justify-around items-center">
@@ -67,7 +88,6 @@
         </div>
     </div>
 
-    {{-- <h3 class="text-3xl font-bold text-white">{{ $title }}</h3> --}}
     <!-- Filter Buttons -->
     <div class="w-full md:flex md:justify-between">
         <div class="flex gap-3" id="filterButtons">
@@ -104,60 +124,17 @@
     <!-- Stats Cards - TETAP SAMA, tidak diubah -->
     <div class="w-full lg:flex gap-7">
         <div class="w-full lg:w-1/2 grid grid-cols-1 xl:grid-cols-2 mb-7 lg:mb-0 gap-7" id="statsCards">
-            {{-- @livewire(
-                'component.cards.stats-card',
-                [
-                    'title' => 'Carbon Emissions',
-                    'value' => $data_emisi['total'] ?? '0',
-                    'unit' => 'Kg',
-                    'icon' => 'wind',
-                ],
-                key('stats-card-carbon')
-            )
-
-            @livewire(
-                'component.cards.stats-card',
-                [
-                    'title' => 'Level of Service',
-                    'value' => $data['service'],
-                    'unit' => '',
-                    'icon' => 'arrows-up-from-line',
-                ],
-                key("service-{$filter}")
-            )
-
-            @livewire(
-                'component.cards.stats-card',
-                [
-                    'title' => 'Peak Flow Time',
-                    'value' => $data['peak'],
-                    'unit' => '',
-                    'icon' => 'clock',
-                ],
-                key("peak-{$filter}")
-            )
-
-            @livewire(
-                'component.cards.stats-card',
-                [
-                    'title' => 'Total Losses',
-                    'value' => $data['cost'],
-                    'unit' => '',
-                    'icon' => 'circle-dollar-sign',
-                ],
-                key("cost-{$filter}")
-            ) --}}
             <livewire:component.cards.stats-card :title="'Carbon Emissions'" :value="$data_emisi['total'] ?? 0" :unit="'Kg'" :icon="'wind'"
-                :key="'dashboard-stats-card-carbon-' . $filter" />
+                :link="url('/distance')" :key="'dashboard-stats-card-carbon-' . $filter" />
 
             <livewire:component.cards.stats-card :title="'Level of Service'" :value="$data_emisi['los'] ?? '-'" :unit="''" :icon="'arrows-up-from-line'"
-                :key="'dashboard-service-' . $filter" />
+                :link="url('/distance')" :key="'dashboard-service-' . $filter" />
 
-            <livewire:component.cards.stats-card :title="'Peak Flow Time'" :value="$data['peak'] ?? '-'" :unit="''"
-                :icon="'clock'" :key="'dashboard-peak-' . $filter" />
+            <livewire:component.cards.stats-card :title="'Peak Flow Time'" :value="$data_emisi['peak'] ?? '-'" :unit="''"
+                :link="url('/distance')" :icon="'clock'" :key="'dashboard-peak-' . $filter" />
 
             <livewire:component.cards.stats-card :title="'Total Losses'" :value="$data_emisi['cost'] ?? '-'" :unit="'Ribu Rp'"
-                {{-- ✅ kasih unit biar jelas --}} :icon="'circle-dollar-sign'" :key="'dashboard-cost-' . $filter" />
+                :link="url('/distance')" :icon="'circle-dollar-sign'" :key="'dashboard-cost-' . $filter" />
 
         </div>
 

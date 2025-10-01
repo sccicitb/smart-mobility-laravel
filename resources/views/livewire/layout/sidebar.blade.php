@@ -128,7 +128,7 @@
             <a href="{{ route('dashboard') }}"
                 class="navside d-flex align-items-center {{ request()->routeIs('dashboard') ? 'navside-active' : '' }}">
                 <div wire:ignore>
-                    <i data-lucide="tv-minimal-play"></i>
+                    <i data-lucide="home"></i>
                 </div>
                 <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Dashboard' }}</span>
             </a>

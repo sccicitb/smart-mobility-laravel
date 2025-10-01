@@ -66,6 +66,8 @@ class ChartsCard extends Component
 
     public function changeChartType($type)
     {
+        $this->dispatch('chart-loading', true);
+
         \Log::debug("Changing chart type to: {$type}");
 
         if (!in_array($type, ['line', 'bar', 'donut'])) {
@@ -90,6 +92,7 @@ class ChartsCard extends Component
                 detail: eventData
             }));
         ");
+        $this->dispatch('chart-loading', false);
     }
 
     public function setFilter($newFilter)

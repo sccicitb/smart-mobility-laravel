@@ -20,6 +20,8 @@ class DashboardNew extends Component
         'water' => 0,
     ];
     public $data_emisi = [];
+    public $isLoading = false;
+    public $peakTime = '';
     public $tanggal;
     public $vehicleData = [];
 
@@ -48,81 +50,160 @@ class DashboardNew extends Component
 
     public $cost = 0;
     public $los = '';
-
+    protected $listeners = ['chart-loading' => 'setLoading'];
+    public function setLoading($status)
+    {
+        $this->isLoading = $status;
+    }
     public function fetchData()
     {
+        $this->isLoading = true;
+
         $key = "emisi_{$this->filter}";
 
-        $this->data_emisi = Cache::remember($key, now()->addMinutes(10), function () {
-            $query = DB::table('arus as a')
-                ->leftJoin('jarak_simpang as j', function ($join) {
-                    $join->on('a.ID_Simpang', '=', 'j.ID_Simpang')
-                        ->on('a.dari_arah', '=', 'j.dari_arah')
-                        ->on('a.ke_arah', '=', 'j.ke_arah')
-                        ->where('j.status', '=', 'aktif');
-                })
-                ->selectRaw("SUM(
-                    (a.SM * 80 * j.jarak_km) + 
-                    (a.MP * 180 * j.jarak_km) + 
-                    (a.AUP * 350 * j.jarak_km) + 
-                    (a.TR * 250 * j.jarak_km) + 
-                    (a.BS * 800 * j.jarak_km) + 
-                    (a.TS * 400 * j.jarak_km) + 
-                    (a.TB * 600 * j.jarak_km) + 
-                    (a.BB * 1200 * j.jarak_km) + 
-                    (a.GANDENG * 900 * j.jarak_km)
+        try {
+
+            $this->data_emisi = Cache::remember($key, now()->addMinutes(10), function () {
+                $query = DB::table('arus as a')
+                    ->leftJoin('jarak_simpang as j', function ($join) {
+                        $join->on('a.ID_Simpang', '=', 'j.ID_Simpang')
+                            ->on('a.dari_arah', '=', 'j.dari_arah')
+                            ->on('a.ke_arah', '=', 'j.ke_arah')
+                            ->where('j.status', '=', 'aktif');
+                    })
+                    ->selectRaw("
+                SUM(
+                    (
+                      (a.SM * 80 * j.jarak_km) + 
+                      (a.MP * 180 * j.jarak_km) + 
+                      (a.AUP * 350 * j.jarak_km) + 
+                      (a.TR * 250 * j.jarak_km) + 
+                      (a.BS * 800 * j.jarak_km) + 
+                      (a.TS * 400 * j.jarak_km) + 
+                      (a.TB * 600 * j.jarak_km) + 
+                      (a.BB * 1200 * j.jarak_km) + 
+                      (a.GANDENG * 900 * j.jarak_km)
+                    ) / NULLIF(j.lebar_jalan,0)
                 ) / 1000 AS total_emisi_co2_kg,
-                
+    
                 SUM(
                     (a.SM * 10 + a.MP * 20 + 
                      (a.AUP + a.TR + a.BS + a.TS + a.TB + a.BB + a.GANDENG) * 40
                     ) * j.jarak_km
                 ) AS total_kerugian_ribu_rp
-                ")
-                ->whereNotNull('j.jarak_km');
+            ")
+                    ->whereNotNull('j.jarak_km');
 
-            if ($this->filter === 'today') {
-                $query->whereDate('a.waktu', today());
-            } elseif ($this->filter === 'week') {
-                $query->whereBetween('a.waktu', [now()->startOfWeek(), now()->endOfWeek()]);
-            } elseif ($this->filter === 'month') {
-                $query->whereMonth('a.waktu', now()->month)
-                    ->whereYear('a.waktu', now()->year);
-            }
+                // Filter waktu
+                if ($this->filter === 'today') {
+                    $query->whereDate('a.waktu', today());
+                } elseif ($this->filter === 'week') {
+                    $query->whereBetween('a.waktu', [now()->startOfWeek(), now()->endOfWeek()]);
+                } elseif ($this->filter === 'month') {
+                    $query->whereMonth('a.waktu', now()->month)
+                        ->whereYear('a.waktu', now()->year);
+                }
 
-            $result = $query->first();
+                $result = $query->first();
 
-            $emisi = $result->total_emisi_co2_kg ?? 0;   // Kg
-            $cost = $result->total_kerugian_ribu_rp ?? 0; // ribu Rp
+                $emisi = $result->total_emisi_co2_kg ?? 0;   // Kg
+                $cost = $result->total_kerugian_ribu_rp ?? 0; // ribu Rp
 
-            // ✅ Tentukan LOS
-            if ($emisi < 1000 && $cost < 50000) {
-                $los = 'A';
-            } elseif ($emisi < 5000 && $cost < 200000) {
-                $los = 'B';
-            } elseif ($emisi < 10000 && $cost < 500000) {
-                $los = 'C';
-            } elseif ($emisi < 20000 && $cost < 1000000) {
-                $los = 'D';
-            } else {
-                $los = 'E';
-            }
+                // Tentukan LOS
+                if ($emisi < 1000 && $cost < 50000) {
+                    $los = 'A';
+                } elseif ($emisi < 5000 && $cost < 200000) {
+                    $los = 'B';
+                } elseif ($emisi < 10000 && $cost < 500000) {
+                    $los = 'C';
+                } elseif ($emisi < 20000 && $cost < 1000000) {
+                    $los = 'D';
+                } else {
+                    $los = 'E';
+                }
 
-            $this->cost = $cost;
-            $this->los = $los;
+                // Ambil peak jam (3 jam interval paling padat)
+                if ($this->filter === 'today') {
+                    $start = today()->toDateString();
+                    $end = today()->toDateString();
+                } elseif ($this->filter === 'week') {
+                    $start = now()->startOfWeek()->toDateString();
+                    $end = now()->endOfWeek()->toDateString();
+                } elseif ($this->filter === 'month') {
+                    $start = now()->startOfMonth()->toDateString();
+                    $end = now()->endOfMonth()->toDateString();
+                } else {
+                    $start = today()->toDateString();
+                    $end = today()->toDateString();
+                }
 
-            return [
-                'total' => $emisi,
-                'cost' => $cost,
-                'los' => $los,
-            ];
-        });
+                // Query MySQL-compatible untuk peak time
+                $peak = DB::select("
+            WITH volume_per_jam AS (
+                SELECT 
+                    DATE(waktu) AS tanggal,
+                    HOUR(waktu) AS jam,
+                    SUM(SM + MP + AUP + TR + BS + TS + TB + BB + GANDENG) AS total_volume
+                FROM arus
+                WHERE DATE(waktu) BETWEEN ? AND ?
+                GROUP BY DATE(waktu), HOUR(waktu)
+            ),
+            rentang_3jam AS (
+                SELECT 
+                    v1.tanggal,
+                    v1.jam AS jam_mulai,
+                    v1.jam + 2 AS jam_akhir,
+                    v1.total_volume + COALESCE(v2.total_volume, 0) + COALESCE(v3.total_volume, 0) AS total_rentang
+                FROM volume_per_jam v1
+                LEFT JOIN volume_per_jam v2 
+                    ON v1.tanggal = v2.tanggal AND v2.jam = v1.jam + 1
+                LEFT JOIN volume_per_jam v3 
+                    ON v1.tanggal = v3.tanggal AND v3.jam = v1.jam + 2
+            )
+            SELECT 
+                CONCAT(LPAD(CAST(jam_mulai AS CHAR), 2, '0'), ':00') AS start_jam,
+                CONCAT(LPAD(CAST(jam_akhir AS CHAR), 2, '0'), ':59') AS end_jam,
+                total_rentang
+            FROM rentang_3jam
+            ORDER BY total_rentang DESC
+            LIMIT 1
+        ", [$start, $end]);
 
-        $this->dispatch('emisiData', [
-            'data' => $this->data_emisi,
-            'cost' => $this->cost,
-            'los' => $this->los,
-        ]);
+                $peakRange = null;
+                if (!empty($peak) && isset($peak[0])) {
+                    $peakRange = $peak[0]->start_jam . ":00 - " . $peak[0]->end_jam . ":59";
+                    \Log::info('📌 Peak Range Ditemukan', [
+                        'start_jam' => $peak[0]->start_jam,
+                        'end_jam' => $peak[0]->end_jam,
+                        'peakRange' => $peakRange,
+                        'total' => $peak[0]->total_rentang ?? null,
+                    ]);
+                }
+                \Log::info('show range', ['jam' => $peak]);
+                // Set ke property class
+                $this->cost = $cost;
+                $this->los = $los;
+                $this->peakTime = $peakRange;
+
+                return [
+                    'total' => $emisi,
+                    'cost' => $cost,
+                    'los' => $los,
+                    'peak' => $peakRange,
+                ];
+            });
+
+
+            $this->dispatch('emisiData', [
+                'data' => $this->data_emisi,
+                'cost' => $this->cost,
+                'los' => $this->los,
+                'peak' => $this->peakTime,
+            ]);
+
+        } finally {
+            $this->isLoading = false;
+        }
     }
 
     public function setFilter($filter)
@@ -175,19 +256,17 @@ class DashboardNew extends Component
         ];
 
         // Ikon per jenis kendaraan
-        $vehicleIcons = [
-            'SM' => 'bike',
-            'MP' => 'car',
-            'BS' => 'bus',
-            'TR' => 'truck',
-            'AUP' => 'car-front',
-            'TB' => 'truck',
-            'BB' => 'package',
-            'GANDENG' => 'truck',
-            'KTB' => 'truck',
-        ];
-
-
+        // $vehicleIcons = [
+        //     'SM' => 'bike',
+        //     'MP' => 'car',
+        //     'BS' => 'bus',
+        //     'TR' => 'truck',
+        //     'AUP' => 'car-front',
+        //     'TB' => 'truck',
+        //     'BB' => 'package',
+        //     'GANDENG' => 'truck',
+        //     'KTB' => 'truck',
+        // ];
 
         $incoming = [];
         $outgoing = [];
@@ -204,23 +283,19 @@ class DashboardNew extends Component
                 'labels' => array_values($vehicleTypes),
                 'values' => $incoming,
                 'percentages' => array_map(fn($v) => $incomingTotal ? round($v / $incomingTotal * 100) . '%' : '0%', $incoming),
-                'iconComponents' => array_values($vehicleIcons),
+                // 'iconComponents' => array_values($vehicleIcons),
             ],
             'outgoingVehicles' => [
                 'labels' => array_values($vehicleTypes),
                 'values' => $outgoing,
                 'percentages' => array_map(fn($v) => $outgoingTotal ? round($v / $outgoingTotal * 100) . '%' : '0%', $outgoing),
-                'iconComponents' => array_values($vehicleIcons),
+                // 'iconComponents' => array_values($vehicleIcons),
             ]
         ];
-
 
         // Emit ke chart Livewire
         $this->dispatch('vehicleDataUpdated', $this->vehicleData);
     }
-
-
-
 
     public function loadData()
     {
@@ -228,21 +303,21 @@ class DashboardNew extends Component
             $this->data = [
                 'carbon' => 1250,
                 'service' => "A",
-                'peak' => "10:00 - 12:00",
+                'peak' => "00:00 - 00:00",
                 'cost' => 200000,
             ];
         } elseif ($this->filter === 'week') {
             $this->data = [
                 'carbon' => 150,
                 'service' => "A",
-                'peak' => "10:00 - 12:00",
+                'peak' => "00:00 - 00:00",
                 'cost' => 13020,
             ];
         } elseif ($this->filter === 'month') {
             $this->data = [
                 'carbon' => 1550,
                 'service' => "B",
-                'peak' => "10:00 - 12:00",
+                'peak' => "00:00 - 00:00",
                 'cost' => 201000,
             ];
         }
@@ -258,8 +333,8 @@ class DashboardNew extends Component
         $this->selectedDate = Carbon::today()->format('Y-m-d');
         $this->loadData();
         $this->loadVehicleData();
+        $this->fetchData();
         $this->tanggal = today()->toDateString();
-        // jangan langsung fetchData()
     }
 
     public function render()

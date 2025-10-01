@@ -16,8 +16,14 @@ use App\Livewire\SurveyPage;
 use App\Livewire\Dashboard;
 use App\Http\Controllers\IntersectionController;
 use Illuminate\Http\Request;
+use App\Livewire\JarakSimpangTable;
 use Illuminate\Support\Facades\DB;
 use App\Livewire\DashboardNew;
+use Livewire\Livewire;
+
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/livewire/update', $handle);
+});
 
 // Public routes
 Route::get('/', function () {
@@ -35,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/maps', Maps::class)->name('maps');
     Route::get('/simulations', Simulations::class)->name('simulations');
     Route::get(uri: '/dashboard', action: DashboardNew::class)->name(name: 'dashboard');
+    Route::get(uri: '/distance', action:JarakSimpangTable::class)->name(name: 'distance');
 });
 // Route::get('/dashboard', Dashboard::class)->name('dashboard-legacy');
 Route::get('/intersections', Intersections::class)->name('intersections');
