@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         [
             SimpangSeeder::class,            
             UsersTableSeeder::class,
-            TriggerSeeder::class,            
+            TriggerSeeder::class,
+            ArusDetailedToArusTriggerSeeder::class,  // ← ADD THIS
             ArusTimurSeeder::class,
             ArusBaratSeeder::class,
             ArusUtaraSeeder::class,
