@@ -1,4 +1,4 @@
-﻿﻿<div class="px-6 py-4 flex flex-col gap-6 w-full">
+<div class="px-6 py-4 flex flex-col gap-6 w-full">
 
     {{-- Loading Overlay (moved inside main container as first child) --}}
     <div wire:loading class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999]">
@@ -23,15 +23,15 @@
         </div>
         <div class="flex gap-2">
             <button type="button" wire:key="tp-filter-today" wire:click="setFilter('today')"
-                class="px-4 py-2 rounded-lg btn text-sm font-semibold transition-colors {{ $filter === 'today' ? 'bg-[#7c2d2d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors {{ $filter === 'today' ? 'bg-[#7c2d2d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                 Hari Ini
             </button>
             <button type="button" wire:key="tp-filter-week" wire:click="setFilter('week')"
-                class="px-4 py-2 rounded-lg btn text-sm font-semibold transition-colors {{ $filter === 'week' ? 'bg-[#7c2d2d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors {{ $filter === 'week' ? 'bg-[#7c2d2d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                 Minggu Ini
             </button>
             <button type="button" wire:key="tp-filter-month" wire:click="setFilter('month')"
-                class="px-4 py-2 rounded-lg btn text-sm font-semibold transition-colors {{ $filter === 'month' ? 'bg-[#7c2d2d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors {{ $filter === 'month' ? 'bg-[#7c2d2d] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                 Bulan Ini
             </button>
         </div>
