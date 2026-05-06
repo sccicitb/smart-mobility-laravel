@@ -31,7 +31,7 @@ class PerbandinganKendaraan extends Component
     {
         $periode = $this->selectedFilter;
         $data = DB::select("CALL get_kendaraan_statistik(?)", [$periode]);
-
+        // $data = DB::table('kendaraans')->get();
         $this->jenisKendaraan = collect($data)->map(function ($item) {
             return [
                 'name' => $this->mapJenisKendaraan($item->jenis),

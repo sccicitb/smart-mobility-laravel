@@ -9,6 +9,10 @@ class SimpangSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::table('simpang')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
         $simpang = [];
         
         // Generate 100 simpang records

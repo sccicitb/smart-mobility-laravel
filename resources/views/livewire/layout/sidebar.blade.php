@@ -1,234 +1,248 @@
 <style>
-    .navside-back {
+    html, body {
+        overflow-x: hidden;
+    }
+
+    #sidebar {
+        width: 256px;
+        height: 100vh;
         display: flex;
-        gap: 10px;
+        flex-direction: column;
+        background: #7c2d2d;
+        transition: width 0.3s ease;
     }
 
-    .sidebar-side {
-        position: sticky;
-        top: 0;
+    #sidebar.collapsed {
+        width: 80px;
     }
 
-    .navside span {
-        transition: opacity 0.3s ease;
-    }
-
-    .collapsed .navside span {
-        opacity: 0;
-    }
-
-    .navside {
-        width: 90%;
+    /* Header */
+    .sidebar-header {
+        display: flex;
         align-items: center;
-        margin: 0 auto;
-        outline: none;
-        padding: 6px;
+        justify-content: space-between;
+        padding: 16px;
+        border-bottom: 1px solid #5c1f1f;
+        height: 64px;
+        flex-shrink: 0;
+    }
+
+    #sidebar.collapsed .sidebar-header {
+        justify-content: center;
+        padding: 12px 8px;
+    }
+
+    .sidebar-logo {
+        height: 40px;
+        width: auto;
+    }
+
+    #sidebar.collapsed .sidebar-logo {
+        display: none;
+    }
+
+    .sidebar-toggle {
+        background: none;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+    .sidebar-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
         border-radius: 6px;
-        color: #fff;
+    }
+
+    .sidebar-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Nav */
+    .sidebar-nav {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px 8px;
+        gap: 8px;
+    }
+
+    #sidebar.collapsed .sidebar-nav {
+        padding: 12px 8px;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 12px 16px;
+        color: white;
         text-decoration: none;
-        background-color: transparent;
-        transition: all 0.3s ease;
+        border-radius: 8px;
+        transition: all 0.2s;
+        white-space: nowrap;
+        cursor: pointer;
     }
 
-    .navside:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        text-decoration: none;
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
     }
 
-    .navside-active {
-        background-color: #fff;
-        color: #892120 !important;
+    .nav-link.active {
+        background: white;
+        color: #7c2d2d;
+        font-weight: 600;
     }
 
-    .navside-active i,
-    .navside-active span {
-        color: #892120 !important;
+    .nav-link svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        margin-right: 12px;
     }
 
-    .navside:focus {
-        outline: none;
+    .nav-link span {
+        font-size: 14px;
+        font-weight: 500;
     }
 
-    .collapsed .nav-text {
-        opacity: 0;
-        width: 0;
-        padding: 0;
-        margin: 0;
+    #sidebar.collapsed .nav-link {
+        justify-content: center;
+        padding: 12px 8px;
     }
 
-    .sidebar-side {
-        width: 250px;
-        transition: all 0.3s ease;
+    #sidebar.collapsed .nav-link svg {
+        margin-right: 0;
+        width: 24px;
+        height: 24px;
     }
 
-    .sidebar-side.collapsed {
-        width: 50px !important;
-        padding: 0 5px;
+    #sidebar.collapsed .nav-link span {
+        display: none;
     }
 
-    /* Menyembunyikan teks navigasi */
-    .collapsed .nav-text {
-        opacity: 0;
-        width: 0;
-        padding: 0;
-        margin: 0;
-        transition: all 0.3s ease;
+    /* Tooltip */
+    #sidebar.collapsed .nav-link {
+        position: relative;
     }
 
-    /* Lucide icon di tengah saat collapsed */
-    .collapsed .navside i {
-        margin-left: auto;
-        margin-right: auto;
+    #sidebar.collapsed .nav-link:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: calc(100% + 10px);
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 100;
     }
 
-    /* Logo lebih kecil saat collapsed */
-    .sidebar-side.collapsed #sidebarLogo {
-        max-height: 40px !important;
+    /* Footer */
+    .sidebar-footer {
+        border-top: 1px solid #5c1f1f;
+        padding: 8px;
+        flex-shrink: 0;
     }
 
-    /* Optional animasi untuk logo */
-    #sidebarLogo {
-        transition: max-height 0.3s ease;
+    .sidebar-footer .nav-link {
+        color: white;
     }
 </style>
-<!-- @class(['collapsed' => $collapsed]) -->
-<div class="sidebar-side"
-    style="background: #892120; border-radius: 0px 0px 0px 0px; overflow: hidden; width: {{ $collapsed ? '70px' : '250px' }}; transition: all 0.3s ease;">
-    <div class="d-flex flex-column align-items-stretch py-[10px] gap-2">
-        <!-- Toggle Button -->
-        <button type="button" class="btn d-flex align-items-center" onclick="toggleSidebar(this)"
-            style="border-radius: 0px 16px 0px 0px; min-height: 64px; border: none;">
 
-
-            <img id="sidebarLogo" src="{{ asset('images/IC_Smart Mobility_White.png') }}" alt="Smart Mobility"
-                style="height: 60px;" onerror="this.style.display='none'">
-
-            <div wire:ignore class="ms-auto">
-                <i id="chevronIcon" data-lucide="chevron-left" class="text-white"></i>
-            </div>
-            <!-- <div wire:ignore class="ms-auto" onclick="toggleChevron(this, event)"> -->
-
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed left-0 top-0 bg-red-900 text-white z-40">
+    <!-- Header -->
+    <div class="sidebar-header">
+        <img src="{{ asset('images/IC_Smart Mobility_White.png') }}" alt="Smart Mobility" class="sidebar-logo">
+        <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+            <svg id="chevronIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
         </button>
-
-        <!-- Logo / Header -->
-
-        <!-- Navigation Items -->
-        <div class="navside-back flex-column">
-            {{-- Dashboard --}}
-            {{-- @php
-                $isDashboardActive = Str::contains(url()->current(), 'dashboard/mobility');
-            @endphp --}}
-            {{-- <a href="http://63.250.52.19:9091/dashboard/mobility"
-                class="navside d-flex align-items-center {{ $isDashboardActive ? 'navside-active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="layout-dashboard"></i>
-                </div>
-                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Dashboard' }}</span>
-            </a> --}}
-            <a href="{{ route('dashboard') }}"
-                class="navside d-flex align-items-center {{ request()->routeIs('dashboard') ? 'navside-active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="home"></i>
-                </div>
-                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Dashboard' }}</span>
-            </a>
-
-            {{-- Simulation --}}
-            <a href="{{ route('simulations') }}"
-                class="navside d-flex align-items-center {{ request()->routeIs('simulations') ? 'navside-active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="tv-minimal-play"></i>
-                </div>
-                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Simulation' }}</span>
-            </a>
-
-            {{-- Maps --}}
-            {{-- <a href="{{ route('maps') }}"
-                class="navside d-flex align-items-center {{ request()->routeIs('maps') ? 'navside-active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="map"></i>
-                </div>
-                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Maps' }}</span>
-            </a>
-
-            <a href="{{ route('tutorial') }}"
-                class="navside d-flex align-items-center {{ request()->routeIs('tutorial') ? 'navside-active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="book-open"></i>
-                </div>
-                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Tutorial' }}</span>
-            </a>
-            <a href="{{ route('settings') }}"
-                class="navside d-flex align-items-center {{ request()->routeIs('settings') ? 'navside-active' : '' }}">
-                <div wire:ignore>
-                    <i data-lucide="settings"></i>
-                </div>
-                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Settings' }}</span>
-            </a> --}}
-            <a href="{{ route('logout') }}" class="navside d-flex align-items-center"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <div wire:ignore>
-                    <i data-lucide="log-out"></i>
-                </div>
-                <span class="nav-text ms-3 font-semibold">{{ $collapsed ? '' : 'Logout' }}</span>
-            </a> 
-            <form id="logout-form" action="{{ route('logout') }}" method="GET" class="d-none">
-                @csrf
-            </form>
-        </div>
     </div>
-</div>
 
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+        <a href="{{ route('dashboard') }}" data-tooltip="Dashboard" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 11l4-4m0 0l4 4m-4-4V3"></path>
+            </svg>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ route('simulations') }}" data-tooltip="Simulation" class="nav-link {{ request()->routeIs('simulations') ? 'active' : '' }}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Simulation</span>
+        </a>
+
+        <a href="{{ route('simulasi-rute') }}" data-tooltip="Simulasi Rute" class="nav-link {{ request()->routeIs('simulasi-rute') ? 'active' : '' }}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+            </svg>
+            <span>Simulasi Rute</span>
+        </a>
+
+        <a href="{{ route('transportasi-publik') }}" data-tooltip="Transportasi Publik" class="nav-link {{ request()->routeIs('transportasi-publik') ? 'active' : '' }}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+            </svg>
+            <span>Transportasi Publik</span>
+        </a>
+
+        <a href="{{ route('kendaraan-otonom') }}" data-tooltip="Kendaraan Otonom" class="nav-link {{ request()->routeIs('kendaraan-otonom') ? 'active' : '' }}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"></path>
+            </svg>
+            <span>Kendaraan Otonom</span>
+        </a>
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+        <form id="logoutForm" action="{{ route('logout') }}" method="GET" class="hidden">@csrf</form>
+        <button onclick="document.getElementById('logoutForm').submit()" data-tooltip="Logout" class="nav-link w-full">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            <span>Logout</span>
+        </button>
+    </div>
+</aside>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.querySelector('.sidebar-side');
-        const icon = document.getElementById('chevronIcon');
-        const logo = document.getElementById('sidebarLogo');
-        const collapsedState = localStorage.getItem('sidebarCollapsed');
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const toggle = document.getElementById('sidebarToggle');
+        const chevron = document.getElementById('chevronIcon');
 
-        if (collapsedState === 'true') {
+        if (!sidebar || !toggle || !chevron) return;
+
+        // Restore sidebar state from localStorage
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
             sidebar.classList.add('collapsed');
-            icon.setAttribute('data-lucide', 'chevron-right');
-            lucide.createIcons();
-            logo.setAttribute('src', "{{ asset('') }}");
-            logo.setAttribute('style', 'max-height: 5px;')
-        } else {
-            logo.setAttribute('src', "{{ asset('images/IC_Smart Mobility_White.png') }}");
-            logo.setAttribute('style', 'max-height: 60px;');
+            chevron.style.transform = 'scaleX(-1)';
         }
 
-        if (logo.getAttribute('src') === '') {
-            logo.style.display = 'none';
-        } else {
-            logo.style.display = 'block';
-        }
-
-        lucide.createIcons();
+        // Toggle sidebar on button click
+        toggle.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('sidebarCollapsed', isCollapsed);
+            chevron.style.transform = isCollapsed ? 'scaleX(-1)' : 'scaleX(1)';
+        });
     });
-
-    function toggleSidebar (button) {
-        const sidebar = button.closest('.sidebar-side');
-        const icon = document.getElementById('chevronIcon');
-        const logo = document.getElementById('sidebarLogo');
-        // $collapsed = !$collapsed
-        // Livewire.emit('toggleSidebar'); // Trigger ke Livewire component
-        const isCollapsed = sidebar.classList.toggle('collapsed');
-
-        // Ganti ikon panah
-        icon.setAttribute('data-lucide', isCollapsed ? 'chevron-right' : 'chevron-left');
-        localStorage.setItem('sidebarCollapsed', isCollapsed);
-        lucide.createIcons();
-
-        // Ganti logo
-        logo.setAttribute('src', isCollapsed
-            ? "{{ asset('') }}"
-            : "{{ asset('images/IC_Smart Mobility_White.png') }}"
-        );
-        logo.setAttribute('style', isCollapsed
-            ? 'max-height: 5px;'
-            : 'max-height: 60px;'
-        );
-
-    }
 </script>

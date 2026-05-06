@@ -9,16 +9,14 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password123'), // Ganti dengan password yang diinginkan
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            ['name' => 'Admin User', 'password' => bcrypt('password123')]
+        );
 
-        User::create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password123'), // Ganti dengan password yang diinginkan
-        ]);
+        User::updateOrCreate(
+            ['email' => 'user@example.com'],
+            ['name' => 'Regular User', 'password' => bcrypt('password123')]
+        );
     }
 }

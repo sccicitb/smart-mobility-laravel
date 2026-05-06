@@ -1,9 +1,9 @@
 <div 
-    class="bg-white/90 rounded-2xl shadow-sm 
-           p-6 flex items-center justify-between cursor-pointer
+    class="bg-white rounded-2xl shadow-sm border border-gray-100
+           p-5 flex items-center justify-between cursor-pointer
            transition-all duration-200 ease-in-out
-           hover:shadow-md hover:shadow-red-800/50
-           hover:bg-red-700/40 hover:text-white text-gray-700"
+           hover:shadow-md hover:border-[#892120]/30
+           hover:bg-[#892120]/5 group"
     x-data="{ icon: '{{ $icon }}' }"
     x-init="$nextTick(() => { if (typeof lucide !== 'undefined') lucide.createIcons() })"
 >
@@ -12,21 +12,21 @@
     @endif
 
         <div>
-            <h3 class="font-semibold text-lg">{{ $title }}</h3>
-            <p class="text-2xl font-bold">
+            <p class="text-xs font-medium text-gray-500 mb-1">{{ $title }}</p>
+            <p class="text-2xl font-bold text-gray-800 group-hover:text-[#892120] transition-colors">
                 @if (is_numeric($value))
                     {{ number_format($value, 0, ',', '.') }}
                 @else
                     {{ $value }}
                 @endif
                 @if ($unit)
-                    <span class="text-sm font-medium">{{ $unit }}</span>
+                    <span class="text-sm font-medium text-gray-500 ml-0.5">{{ $unit }}</span>
                 @endif
             </p>
         </div>
 
-        <div class="bg-[#ffc0bf] p-3 rounded-full">
-            <i :data-lucide="icon" class="w-8 h-8 text-[#892120]"></i>
+        <div class="w-11 h-11 bg-[#892120]/10 group-hover:bg-[#892120]/20 rounded-xl flex items-center justify-center transition-colors">
+            <i :data-lucide="icon" class="w-5 h-5 text-[#892120]"></i>
         </div>
 
     @if (!empty($link))

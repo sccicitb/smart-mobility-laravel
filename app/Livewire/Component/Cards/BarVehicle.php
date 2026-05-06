@@ -6,38 +6,15 @@ use Livewire\Component;
 
 class BarVehicle extends Component
 {
-    public $chartId;
-    public $positionText = false;
-    public $chartData = [];
+    public string $chartId = '';
+    public bool $positionText = false;
+    public array $chartData = [];
 
-    protected $listeners = ['vehicleDataUpdated'];
-
-    public function mount($id = null, $positionText = false, $chartData = [])
+    public function mount(string $id = '', bool $positionText = false, array $chartData = [])
     {
-        // Ensure chartId is always set and unique
-        // Use a more specific prefix to avoid conflicts
-        $this->chartId = $id ?? 'bar-chart-' . uniqid() . '-' . rand(1000, 9999);
+        $this->chartId      = $id ?: 'bar-chart-' . str_replace('.', '', microtime(true));
         $this->positionText = $positionText;
-        $this->chartData = $chartData;
-    }
-
-    public function vehicleDataUpdated($data)
-    {
-        $this->chartData = $data;
-        $this->dispatch('chart-loading', true);
-        // Make sure chartId is set before dispatching
-        if (empty($this->chartId)) {
-            $this->chartId = 'bar-chart-' . uniqid();
-        }
-
-        // Dispatch as a direct object, not wrapped in an array
-        $this->dispatch('bar-chart-updated', 
-            id: $this->chartId,
-            data: $this->chartData,
-            positionText: $this->positionText
-        );
-
-        $this->dispatch('chart-loading', false);
+        $this->chartData    = $chartData;
     }
 
     public function render()

@@ -3,47 +3,30 @@
 namespace App\Livewire\Component\Cards;
 
 use Livewire\Component;
+use Livewire\Attributes\Reactive;
 
 class StatsCard extends Component
 {
-    // Fix: Use camelCase for event listener methods
-    protected $listeners = ['dataUpdated', 'emisiData'];
+    public string $title = 'Default Title';
 
-    public $title;
-    public $value;
-    public $icon;
-    public $unit;
-
-    public function mount($title = "Default Title", $value = 0, $unit = "", $icon = "activity")
-    {
-        $this->title = $title;
-        $this->value = $value;
-        $this->unit = $unit;
-        $this->icon = $icon;
-    }
-
-    // Event listener for emisi-data dispatch
-    public function emisiData($payload)
-    {
-        if (strtolower($this->title) === 'carbon emissions') {
-            $this->value = $payload['data']['total'] ?? 0;
-        }
-        // if (strtolower($this->title) === 'total losses') {
-        //     $this->value = $payload['data']['los'] ?? 0;
-        // }
-        // if (strtolower($this->title) === 'total losses') {
-        //     $this->value = $payload['data']['cos'] ?? 0;
-        // }
-    }
+    #[Reactive]
+    public string|int|float $value = 0;
+    public string $icon  = 'activity';
+    public string $unit  = '';
     public string|null $link = null;
 
-    // Event listener for dataUpdated dispatch
-    public function dataUpdated($data)
-    {
-        // if (strtolower($this->title) === 'carbon emissions') {
-        //     $this->value = $data['carbon'] ?? 0;
-        // }
-        // Add more logic as needed for other card types
+    public function mount(
+        string $title = 'Default Title',
+        string|int|float $value = 0,
+        string $unit = '',
+        string $icon = 'activity',
+        string|null $link = null,
+    ) {
+        $this->title = $title;
+        $this->value = $value;
+        $this->unit  = $unit;
+        $this->icon  = $icon;
+        $this->link  = $link;
     }
 
     public function render()

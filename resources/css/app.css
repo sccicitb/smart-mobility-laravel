@@ -1,3 +1,7 @@
 @import url('./tutorial.css');
 @import url('./insertection-sim.css');
 @import url('./component.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

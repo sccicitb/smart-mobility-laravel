@@ -118,24 +118,14 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Listen for Livewire events
-        document.addEventListener('bar-chart-updated', function(event) {
-            console.log("Chart Data Received:", event.detail);
+    (function() {
+        // Livewire 3 dispatches browser events on window, not document
+        window.addEventListener('bar-chart-updated', function(event) {
+            const eventData = event.detail;
 
-            // Handle array format from Livewire dispatch
-            let eventData = event.detail;
-
-            // If it's an array, get the first element
-            if (Array.isArray(eventData) && eventData.length > 0) {
-                eventData = eventData[0];
-            }
-
-            const {
-                id,
-                data,
-                positionText
-            } = eventData;
+            const id          = eventData?.id          ?? (Array.isArray(eventData) ? eventData[0]?.id : null);
+            const data        = eventData?.data        ?? (Array.isArray(eventData) ? eventData[0]?.data : null);
+            const positionText = eventData?.positionText ?? (Array.isArray(eventData) ? eventData[0]?.positionText : false);
 
             // Validate that we have both id and data
             if (!id || !data) {
@@ -252,4 +242,5 @@
             }
         }
     });
+    })();
 </script>

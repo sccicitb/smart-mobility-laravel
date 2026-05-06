@@ -38,7 +38,8 @@ class Login extends Component
 
     public function render()
     {
-        return view('components.layouts.login');
+        return view('livewire.login')
+            ->layout('components.layouts.login');
     }
 
     //SSOController

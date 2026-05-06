@@ -1,4 +1,4 @@
-<div class="px-6 flex flex-col w-full gap-4">
+<div class="px-6 py-4 flex flex-col w-full gap-6">
     <div wire:loading class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999]">
         <div
             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
@@ -48,7 +48,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center">
                             <img src="{{ asset('images/Impact_Analysist.png') }}" alt="Welcome Image"
-                                class="w-40 h-40 mx-auto my-4 rounded-lg">
+                                class="w-40 h-40 mx-auto my-4 rounded-lg shadow-xs">
                             <div class="font-semibold text-white">Impact Analysis</div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                 <div class="mt-6 flex justify-end">
                     <button
                         onclick="document.getElementById('welcomeModal').classList.add('opacity-0'); setTimeout(()=>{document.getElementById('welcomeModal').remove()}, 300);"
-                        class="px-3 py-2 bg-white text-gray-700 font-semibold shadow-xs rounded-lg">Tutup</button>
+                        class="px-3 py-2 bg-white text-gray-700 font-semibold shadow-xs rounded-lg btn">Tutup</button>
                 </div>
             </div>
         </div>
@@ -76,77 +76,80 @@
             <p class="text-sm text-justify" id="guideDesc">Description Step</p>
             <div class="flex justify-between gap-3 mt-4">
                 <button id="guidePrev"
-                    class="px-3 py-1 rounded bg-gray-100 hover:bg-yellow-400/60 text-gray-800 hover:text-white font-semibold cursor-not-allowed"
+                    class="px-3 py-1 rounded bg-gray-100 btn hover:bg-yellow-400/60 text-gray-800 hover:text-white font-semibold cursor-not-allowed"
                     disabled>Previous</button>
                 <div class="flex justify-end gap-3">
                     <button id="guideNext"
-                        class="px-3 py-1 rounded bg-gray-100 hover:bg-green-400/60 text-gray-800 hover:text-white font-semibold">Next</button>
+                        class="px-3 py-1 rounded btn bg-gray-100 hover:bg-green-400/60 text-gray-800 hover:text-white font-semibold">Next</button>
                     <button id="guideClose"
-                        class="px-3 py-1 rounded bg-gray-100 hover:bg-red-400/60 text-gray-800 hover:text-white font-semibold">Close</button>
+                        class="px-3 py-1 rounded btn bg-gray-100 hover:bg-red-400/60 text-gray-800 hover:text-white font-semibold">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Filter Buttons -->
-    <div class="w-full md:flex md:justify-between">
-        <div class="flex gap-3" id="filterButtons">
-            <button wire:click="setFilter('today')"
-                class="px-4 py-2 rounded-lg text-sm font-semibold 
-                    {{ $filter === 'today' ? 'bg-[#892120] text-white' : 'bg-gray-100 text-gray-700' }}">
-                Today
-            </button>
-            <button wire:click="setFilter('week')"
-                class="px-4 py-2 rounded-lg text-sm font-semibold 
-                    {{ $filter === 'week' ? 'bg-[#892120] text-white' : 'bg-gray-100 text-gray-700' }}">
-                Week
-            </button>
-            <button wire:click="setFilter('month')"
-                class="px-4 py-2 rounded-lg text-sm font-semibold 
-                    {{ $filter === 'month' ? 'bg-[#892120] text-white' : 'bg-gray-100 text-gray-700' }}">
-                Month
-            </button>
+    {{-- Page Header --}}
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+            <h1 class="text-xl font-bold text-gray-800">Dashboard</h1>
+            <p class="text-sm text-gray-500 mt-0.5">Ringkasan data lalu lintas dan analisis dampak simpang</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex items-center gap-3">
+            {{-- Filter Buttons --}}
+            <div class="flex gap-2 bg-gray-100 rounded-xl p-1" id="filterButtons">
+                <button wire:click="setFilter('today')"
+                    class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors btn
+                        {{ $filter === 'today' ? 'bg-[#892120] text-white shadow-sm' : 'text-gray-600 hover:text-gray-800' }}">
+                    Hari Ini
+                </button>
+                <button wire:click="setFilter('week')"
+                    class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors btn
+                        {{ $filter === 'week' ? 'bg-[#892120] text-white shadow-sm' : 'text-gray-600 hover:text-gray-800' }}">
+                    Minggu
+                </button>
+                <button wire:click="setFilter('month')"
+                    class="px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors btn
+                        {{ $filter === 'month' ? 'bg-[#892120] text-white shadow-sm' : 'text-gray-600 hover:text-gray-800' }}">
+                    Bulan
+                </button>
+            </div>
             <button id="startGuideBtn"
-                class="px-4 py-2 rounded-lg text-sm font-semibold bg-[#16598b] text-white hover:bg-[#124d7a] transition-colors duration-200 flex items-center gap-2">
+                class="px-4 py-2 rounded-xl text-sm font-semibold btn bg-[#16598b] text-white hover:bg-[#124d7a] transition-colors flex items-center gap-2">
                 <i data-lucide="help-circle" class="w-4 h-4"></i>
-                Guide
+                Panduan
             </button>
-            {{-- <button id="restartGuideBtn"
-                class="px-4 py-2 rounded-lg text-sm font-semibold bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 flex items-center gap-2">
-                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                Restart Guide
-            </button> --}}
         </div>
     </div>
 
-    <!-- Stats Cards - TETAP SAMA, tidak diubah -->
-    <div class="w-full lg:flex gap-7">
-        <div class="w-full lg:w-1/2 grid grid-cols-1 xl:grid-cols-2 mb-7 lg:mb-0 gap-7" id="statsCards">
+    {{-- Stats & Vehicle Chart --}}
+    <div class="w-full lg:flex gap-5">
+        <div class="w-full lg:w-1/2 grid grid-cols-1 xl:grid-cols-2 mb-5 lg:mb-0 gap-5" id="statsCards">
             <livewire:component.cards.stats-card :title="'Carbon Emissions'" :value="$data_emisi['total'] ?? 0" :unit="'Kg'" :icon="'wind'"
-                :link="url('/distance')" :key="'dashboard-stats-card-carbon-' . $filter" />
+                :link="url('/distance')" :key="'dashboard-stats-card-carbon'" />
 
             <livewire:component.cards.stats-card :title="'Level of Service'" :value="$data_emisi['los'] ?? '-'" :unit="''" :icon="'arrows-up-from-line'"
-                :link="url('/distance')" :key="'dashboard-service-' . $filter" />
+                :link="url('/distance')" :key="'dashboard-service'" />
 
             <livewire:component.cards.stats-card :title="'Peak Flow Time'" :value="$data_emisi['peak'] ?? '-'" :unit="''"
-                :link="url('/distance')" :icon="'clock'" :key="'dashboard-peak-' . $filter" />
+                :link="url('/distance')" :icon="'clock'" :key="'dashboard-peak'" />
 
             <livewire:component.cards.stats-card :title="'Total Losses'" :value="$data_emisi['cost'] ?? '-'" :unit="'Ribu Rp'"
-                :link="url('/distance')" :icon="'circle-dollar-sign'" :key="'dashboard-cost-' . $filter" />
+                :link="url('/distance')" :icon="'circle-dollar-sign'" :key="'dashboard-cost'" />
 
         </div>
 
-        <!-- Placeholder card -->
-        <div class="w-full lg:w-1/2 rounded-2xl p-3 bg-white" id="graficVehicle">
-            <div class="text-gray-700 font-semibold text-lg">{{ $titleBar }}</div>
+        {{-- Vehicle Distribution Card --}}
+        <div class="w-full lg:w-1/2 rounded-2xl p-5 bg-white shadow-sm border border-gray-100" id="graficVehicle">
+            <div class="mb-3">
+                <h2 class="text-base font-semibold text-gray-800">{{ $titleBar }}</h2>
+                <p class="text-xs text-gray-500 mt-0.5">Distribusi klasifikasi kendaraan masuk &amp; keluar</p>
+            </div>
             <div class="grid grid-cols-2 gap-5">
                 <div class="w-full flex my-auto">
                     @livewire(
                         'component.cards.bar-vehicle',
                         [
-                            'id' => 'bar-chart-incoming-' . uniqid(),
+                            'id' => 'bar-chart-incoming',
                             'positionText' => true,
                             'chartData' => $vehicleData['incomingVehicles'] ?? [],
                         ],
@@ -157,7 +160,7 @@
                     @livewire(
                         'component.cards.bar-vehicle',
                         [
-                            'id' => 'bar-chart-outgoing-' . uniqid(),
+                            'id' => 'bar-chart-outgoing',
                             'positionText' => false,
                             'chartData' => $vehicleData['outgoingVehicles'] ?? [],
                         ],
@@ -168,9 +171,9 @@
         </div>
     </div>
 
-    <!-- Chart Section - INDEPENDENT dari stats -->
-    <div class="w-full lg:flex flex-row-reverse gap-7">
-        <div class="w-full lg:w-1/2 mb-7 lg:mb-0" id="barVehicle">
+    {{-- Trend Chart & Camera Section --}}
+    <div class="w-full lg:flex flex-row-reverse gap-5">
+        <div class="w-full lg:w-1/2 mb-5 lg:mb-0" id="barVehicle">
             @livewire(
                 'component.cards.charts-card',
                 [
@@ -181,7 +184,7 @@
                 key('charts-card')
             )
         </div>
-        <div class="w-full lg:w-1/2 flex justify-center h-92 rounded-xl bg-black items-center" id="cameraPreview">
+        <div class="w-full lg:w-1/2 flex justify-center rounded-2xl bg-gray-900 items-center overflow-hidden" style="min-height:280px" id="cameraPreview">
             @livewire(
                 'component.cards.video-player',
                 [
@@ -215,7 +218,7 @@
         console.log("Data Emisi:", event.detail);
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
+    function initGuide() {
         const steps = [{
                 element: document.getElementById('filterButtons'),
                 title: "Filter Data",
@@ -423,7 +426,11 @@
         window.getCurrentStep = function() {
             return currentStep;
         };
-    });
+    }
+
+    // Jalankan saat pertama kali dan setiap navigasi Livewire
+    document.addEventListener('DOMContentLoaded', initGuide);
+    document.addEventListener('livewire:navigated', initGuide);
 </script>
 
 

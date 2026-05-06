@@ -10,6 +10,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::unprepared('DROP PROCEDURE IF EXISTS get_kendaraan_statistik');
+        DB::unprepared('DROP PROCEDURE IF EXISTS get_kendaraan_breakdown');
+
         // Create get_kendaraan_statistik procedure
         DB::unprepared('
             CREATE PROCEDURE get_kendaraan_statistik(IN periode VARCHAR(50))

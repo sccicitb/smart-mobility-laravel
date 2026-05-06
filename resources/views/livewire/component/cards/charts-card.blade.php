@@ -1,28 +1,28 @@
-<div class="bg-white rounded-2xl shadow-xs p-3 h-full">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 h-full">
     <div class="flex items-center justify-between mb-4">
         <div>
-            <h3 class="text-lg font-semibold text-gray-800 mb-1">{{ $title }}</h3>
-            <p class="text-sm text-gray-600">
+            <h2 class="text-base font-semibold text-gray-800">{{ $title }}</h2>
+            <p class="text-xs text-gray-500 mt-0.5">
                 {{ $selectedDate }} 
-                @if($selectedSimpang) | Simpang: {{ $selectedSimpang }} @endif
-                | Filter: {{ $parentFilter }}
+                @if($selectedSimpang) &bull; Simpang: {{ $selectedSimpang }} @endif
+                &bull; Filter: {{ $parentFilter }}
             </p>
         </div>
         
         <!-- Chart Type Selector -->
         <div class="flex gap-2">
             <button wire:click="changeChartType('line')" 
-                class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors
+                class="px-4 py-2 btn rounded-lg text-sm font-semibold transition-colors
                     {{ $chartType === 'line' ? 'bg-[#892120] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                 Line
             </button>
             <button wire:click="changeChartType('bar')" 
-                class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors
+                class="px-4 py-2 btn rounded-lg text-sm font-semibold transition-colors
                     {{ $chartType === 'bar' ? 'bg-[#892120] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                 Bar
             </button>
             <button wire:click="changeChartType('donut')" 
-                class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors
+                class="px-4 py-2 btn rounded-lg text-sm font-semibold transition-colors
                     {{ $chartType === 'donut' ? 'bg-[#892120] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                 Donut
             </button>

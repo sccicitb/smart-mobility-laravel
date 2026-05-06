@@ -19,6 +19,9 @@ use Illuminate\Http\Request;
 use App\Livewire\JarakSimpangTable;
 use Illuminate\Support\Facades\DB;
 use App\Livewire\DashboardNew;
+use App\Livewire\TransportasiPublik;
+use App\Livewire\ComingSoon;
+use App\Livewire\KendaraanOtonom;
 use Livewire\Livewire;
 
 Livewire::setUpdateRoute(function ($handle) {
@@ -42,6 +45,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/simulations', Simulations::class)->name('simulations');
     Route::get(uri: '/dashboard', action: DashboardNew::class)->name(name: 'dashboard');
     Route::get(uri: '/distance', action:JarakSimpangTable::class)->name(name: 'distance');
+    Route::get('/simulasi-rute', ComingSoon::class)->defaults('title', 'Simulasi Rute Transportasi')->name('simulasi-rute');
+    Route::get('/transportasi-publik', TransportasiPublik::class)->name('transportasi-publik');
+    Route::get('/kendaraan-otonom', KendaraanOtonom::class)->name('kendaraan-otonom');
 });
 // Route::get('/dashboard', Dashboard::class)->name('dashboard-legacy');
 Route::get('/intersections', Intersections::class)->name('intersections');
